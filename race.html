@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>F1 Manager 2025 – Corrida</title>
+
+  <link rel="stylesheet" href="race.css" />
+    <link rel="stylesheet" href="styles/design-system.css" />
+  </head>
+
+<body class="race-page">
+
+  <!-- TOPBAR (voltas + aceleração aqui em cima, sem precisar da faixa de baixo) -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="race-title" id="race-title">GP</div>
+      <div class="race-sub" id="race-sub">Volta 1 • Clima • Pista</div>
+    </div>
+
+    <div class="topbar-center">
+      <div class="lap-head">
+        <div class="lap-remaining" id="laps-remaining">— VOLTAS RESTANTES</div>
+        <div class="lap-current" id="lap-current">VOLTA —/—</div>
+      </div>
+
+      <div class="speed-controls" aria-label="Velocidade">
+        <button class="speed-btn" data-speed="1">1x</button>
+        <button class="speed-btn" data-speed="2">2x</button>
+        <button class="speed-btn" data-speed="4">4x</button>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <button id="btn-back-lobby" class="btn-pill">VOLTAR AO LOBBY</button>
+    </div>
+  </div>
+
+  <!-- LAYOUT PRINCIPAL -->
+  <main class="layout">
+    <!-- LEFT: CLASSIFICAÇÃO -->
+    <section class="panel panel-left" aria-label="Classificação">
+      <div class="panel-head">
+        <div class="panel-title">CLASSIFICAÇÃO</div>
+        <div class="panel-meta" id="session-meta">t=0.0s • 1x</div>
+      </div>
+
+      <div class="panel-body scroll">
+        <div id="drivers-list" class="drivers-list"></div>
+      </div>
+    </section>
+
+    <!-- CENTER: MAPA -->
+    <section class="panel panel-center" aria-label="Mapa da pista">
+      <div class="panel-head">
+        <div class="panel-title">MAPA DA PISTA</div>
+        <div class="panel-meta">SVG • pathPoints • 60fps</div>
+      </div>
+
+      <div class="panel-body map-body">
+        <div id="track-container" class="track-container">
+          <!-- O race.js normalmente injeta o SVG/canvas aqui.
+               Mantemos o ID igual para NÃO quebrar a Austrália. -->
+        </div>
+
+        <div class="track-status">
+          <div class="status-chip">
+            <div class="status-label">Volta</div>
+            <div class="status-value" id="chip-lap">—/—</div>
+          </div>
+          <div class="status-chip">
+            <div class="status-label">Estado</div>
+            <div class="status-value" id="chip-state">—</div>
+          </div>
+          <div class="status-chip">
+            <div class="status-label">Clima</div>
+            <div class="status-value" id="chip-weather">—</div>
+          </div>
+          <div class="status-chip">
+            <div class="status-label">Pista</div>
+            <div class="status-value" id="chip-tracktemp">—°C</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: SEUS PILOTOS -->
+    <section class="panel panel-right" aria-label="Seus pilotos">
+      <div class="panel-head">
+        <div class="panel-title">SEUS PILOTOS</div>
+        <div class="panel-meta">Estratégia • Pit • Potência</div>
+      </div>
+
+      <!-- SCROLL INTERNO AQUI (resolve “só consigo com TAB”) -->
+      <div class="panel-body scroll">
+        <div class="user-grid">
+          <!-- PILOTO 0 -->
+          <article id="user-driver-card-0" class="user-card">
+            <div class="user-card-head">
+              <div class="face" id="user-face-0"></div>
+              <div class="who">
+                <div class="who-name" id="user-name-0">Piloto 1</div>
+                <div class="who-sub" id="user-sub-0">Equipe • VOLTA —</div>
+              </div>
+            </div>
+
+            <div class="user-stats">
+              <div class="stat-box">
+                <div class="stat-title">CONDIÇÃO</div>
+                <div class="stat-row">
+                  <div class="stat-big" id="user-cond-0">100%</div>
+                  <div class="stat-tag" id="user-car-0">Carro</div>
+                </div>
+                <div class="bar">
+                  <div class="bar-fill" id="user-condbar-0" style="width:100%"></div>
+                </div>
+              </div>
+
+              <div class="stat-box">
+                <div class="stat-title">PNEU (desgaste)</div>
+                <div class="stat-row">
+                  <div class="stat-big" id="user-tyre-0">M</div>
+                  <div class="stat-tag" id="user-tyrewear-0">100%</div>
+                </div>
+                <div class="bar bar-yellow">
+                  <div class="bar-fill" id="user-tyrebar-0" style="width:100%"></div>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn-action btn-pit" data-action="pit" data-driver="0">PIT STOP</button>
+
+            <div class="controls-grid">
+              <button class="btn-action" data-action="save" data-driver="0">ECONOMIZAR</button>
+              <button class="btn-action" data-action="push" data-driver="0">ATAQUE</button>
+
+              <button class="btn-action" data-action="engineDown" data-driver="0">MOTOR -</button>
+              <button class="btn-action" data-action="engineUp" data-driver="0">MOTOR +</button>
+
+              <button class="btn-action" data-action="aggrDown" data-driver="0">AGRESS -</button>
+              <button class="btn-action" data-action="aggrUp" data-driver="0">AGRESS +</button>
+
+              <button class="btn-action btn-ers" data-action="ers" data-driver="0">ERS BOOST</button>
+            </div>
+          </article>
+
+          <!-- PILOTO 1 -->
+          <article id="user-driver-card-1" class="user-card">
+            <div class="user-card-head">
+              <div class="face" id="user-face-1"></div>
+              <div class="who">
+                <div class="who-name" id="user-name-1">Piloto 2</div>
+                <div class="who-sub" id="user-sub-1">Equipe • VOLTA —</div>
+              </div>
+            </div>
+
+            <div class="user-stats">
+              <div class="stat-box">
+                <div class="stat-title">CONDIÇÃO</div>
+                <div class="stat-row">
+                  <div class="stat-big" id="user-cond-1">100%</div>
+                  <div class="stat-tag" id="user-car-1">Carro</div>
+                </div>
+                <div class="bar">
+                  <div class="bar-fill" id="user-condbar-1" style="width:100%"></div>
+                </div>
+              </div>
+
+              <div class="stat-box">
+                <div class="stat-title">PNEU (desgaste)</div>
+                <div class="stat-row">
+                  <div class="stat-big" id="user-tyre-1">M</div>
+                  <div class="stat-tag" id="user-tyrewear-1">100%</div>
+                </div>
+                <div class="bar bar-yellow">
+                  <div class="bar-fill" id="user-tyrebar-1" style="width:100%"></div>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn-action btn-pit" data-action="pit" data-driver="1">PIT STOP</button>
+
+            <div class="controls-grid">
+              <button class="btn-action" data-action="save" data-driver="1">ECONOMIZAR</button>
+              <button class="btn-action" data-action="push" data-driver="1">ATAQUE</button>
+
+              <button class="btn-action" data-action="engineDown" data-driver="1">MOTOR -</button>
+              <button class="btn-action" data-action="engineUp" data-driver="1">MOTOR +</button>
+
+              <button class="btn-action" data-action="aggrDown" data-driver="1">AGRESS -</button>
+              <button class="btn-action" data-action="aggrUp" data-driver="1">AGRESS +</button>
+
+              <button class="btn-action btn-ers" data-action="ers" data-driver="1">ERS BOOST</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTERBAR (pequeno, não cobre o mapa) -->
+  <footer class="footerbar" aria-label="Barra inferior">
+    <div class="footer-left">
+      <button class="footer-btn" id="btn-menu">☰</button>
+    </div>
+
+    <div class="footer-center">
+      <button class="footer-btn" id="btn-pause">⏸</button>
+      <div class="footer-lap" id="footer-lap">VOLTA —/—</div>
+      <button class="footer-btn primary" id="btn-play">▶</button>
+    </div>
+
+    <div class="footer-right">
+      <!-- reservado para futuras ações -->
+    </div>
+  </footer>
+
+  <script src="race.js"></script>
+</body>
+</html>

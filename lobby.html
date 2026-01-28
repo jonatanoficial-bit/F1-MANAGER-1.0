@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>F1 Manager 2025 — Lobby</title>
+
+  <style>
+    :root{
+      --bg:#07080c;
+      --panel: rgba(18,20,28,.78);
+      --panel2: rgba(18,20,28,.62);
+      --stroke: rgba(255,255,255,.10);
+      --text:#e9eefc;
+      --muted: rgba(233,238,252,.72);
+
+      --red:#ff2e2e;
+      --cyan:#00e5ff;
+      --green:#00ff9a;
+      --orange:#ffb000;
+      --pink:#ff4fd8;
+      --blue:#4aa3ff;
+      --purple:#8a5bff;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background: var(--bg);
+      overflow-y:auto; /* ✅ barra de rolagem */
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* fundo (imagem do projeto) */
+    .bg{
+      position:fixed; inset:0;
+      background:
+        radial-gradient(1200px 600px at 15% 0%, rgba(255,255,255,.10), transparent 55%),
+        radial-gradient(900px 500px at 90% 10%, rgba(0,229,255,.10), transparent 55%),
+        linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.75)),
+        url("assets/ui/lobby_bg.png");
+      background-size: cover;
+      background-position: center;
+      filter: saturate(1.12) contrast(1.05);
+      transform: scale(1.02);
+      z-index:-2;
+    }
+    .vignette{
+      position:fixed; inset:0;
+      background: radial-gradient(circle at 50% 20%, transparent 0 45%, rgba(0,0,0,.85) 80%);
+      z-index:-1;
+      pointer-events:none;
+    }
+
+    .wrap{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px 14px 40px;
+      padding-bottom: calc(40px + env(safe-area-inset-bottom));
+    }
+
+    /* topbar */
+    .topbar{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      padding: 10px 12px;
+      background: rgba(10,12,18,.60);
+      border:1px solid var(--stroke);
+      border-radius: 18px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 10px 32px rgba(0,0,0,.38);
+    }
+    .left{
+      display:flex; align-items:center; gap:10px;
+      min-width: 140px;
+    }
+    .btnBack{
+      border:none;
+      background: linear-gradient(180deg, rgba(255,46,46,.95), rgba(155,0,0,.95));
+      color:white;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 800;
+      letter-spacing:.4px;
+      box-shadow: 0 10px 24px rgba(255,46,46,.25);
+      cursor:pointer;
+    }
+    .brand{
+      display:flex; flex-direction:column; gap:2px;
+      line-height:1.1;
+    }
+    .brand b{
+      font-size: 13px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      opacity:.95;
+    }
+    .brand span{
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .right{
+      display:flex; align-items:center; gap:10px;
+    }
+    .pill{
+      display:flex; align-items:center; gap:8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--stroke);
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .pill strong{ color: var(--text); font-weight:800; }
+
+    /* header */
+    .hero{
+      margin-top: 14px;
+      padding: 18px 16px;
+      border-radius: 18px;
+      border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(18,20,28,.75), rgba(18,20,28,.55));
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.44);
+    }
+    .hero h1{
+      margin:0;
+      font-size: 16px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .hero p{
+      margin:10px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    /* grid */
+    .grid{
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+    }
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: 1fr; }
+      .left{ min-width:auto; }
+    }
+
+    .card{
+      position:relative;
+      border-radius: 18px;
+      border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(18,20,28,.78), rgba(18,20,28,.52));
+      overflow:hidden;
+      box-shadow: 0 12px 36px rgba(0,0,0,.45);
+    }
+    .card::before{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(800px 240px at 20% 0%, rgba(255,255,255,.12), transparent 60%);
+      pointer-events:none;
+    }
+    .cardInner{
+      padding: 14px 14px 12px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      position:relative;
+    }
+
+    .tagrow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .tag{
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(233,238,252,.70);
+    }
+    .chip{
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      color: rgba(233,238,252,.78);
+      white-space:nowrap;
+    }
+
+    .title{
+      font-size: 15px;
+      font-weight: 900;
+      margin:0;
+    }
+    .desc{
+      margin:0;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .actions{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+
+    .btn{
+      border: none;
+      cursor:pointer;
+      padding: 11px 14px;
+      border-radius: 14px;
+      font-weight: 900;
+      letter-spacing: .04em;
+      color: rgba(255,255,255,.95);
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: 0 10px 24px rgba(0,0,0,.25);
+      transition: transform .08s ease, filter .2s ease;
+    }
+    .btn:active{ transform: scale(.98); }
+    .btn:hover{ filter: brightness(1.08); }
+
+    .btnPrimary{
+      background: linear-gradient(180deg, rgba(255,46,46,.95), rgba(160,0,0,.95));
+      border: 1px solid rgba(255,46,46,.28);
+      box-shadow: 0 16px 36px rgba(255,46,46,.22);
+    }
+    .btnCyan{
+      background: linear-gradient(180deg, rgba(0,229,255,.95), rgba(0,120,140,.95));
+      border: 1px solid rgba(0,229,255,.30);
+      box-shadow: 0 16px 36px rgba(0,229,255,.18);
+    }
+    .btnGreen{
+      background: linear-gradient(180deg, rgba(0,255,154,.95), rgba(0,120,70,.95));
+      border: 1px solid rgba(0,255,154,.28);
+      box-shadow: 0 16px 36px rgba(0,255,154,.16);
+    }
+    .btnOrange{
+      background: linear-gradient(180deg, rgba(255,176,0,.95), rgba(140,80,0,.95));
+      border: 1px solid rgba(255,176,0,.26);
+      box-shadow: 0 16px 36px rgba(255,176,0,.16);
+    }
+    .btnPink{
+      background: linear-gradient(180deg, rgba(255,79,216,.95), rgba(140,30,120,.95));
+      border: 1px solid rgba(255,79,216,.22);
+      box-shadow: 0 16px 36px rgba(255,79,216,.16);
+    }
+    .btnBlue{
+      background: linear-gradient(180deg, rgba(74,163,255,.95), rgba(10,70,140,.95));
+      border: 1px solid rgba(74,163,255,.26);
+      box-shadow: 0 16px 36px rgba(74,163,255,.16);
+    }
+    .btnPurple{
+      background: linear-gradient(180deg, rgba(138,91,255,.95), rgba(60,30,140,.95));
+      border: 1px solid rgba(138,91,255,.24);
+      box-shadow: 0 16px 36px rgba(138,91,255,.15);
+    }
+
+    .note{
+      margin-top: 10px;
+      color: rgba(233,238,252,.65);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+  </style>
+    <link rel="stylesheet" href="styles/design-system.css" />
+  </head>
+
+<body>
+  <div class="bg"></div>
+  <div class="vignette"></div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="left">
+        <button class="btnBack" id="btnBack">VOLTAR</button>
+        <div class="brand">
+          <b>LOBBY DA EQUIPE</b>
+          <span id="subLine">Temporada oficial F1 2025</span>
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="pill">Equipe: <strong id="teamName">--</strong></div>
+        <div class="pill">Manager: <strong id="managerName">--</strong></div>
+      </div>
+    </div>
+
+    <div class="hero">
+      <h1>F1 MANAGER 2025 — VALE EDITION</h1>
+      <p>
+        Prepare sua temporada: carro, staff, patrocínios e decisões de pista.
+        Todos os módulos são offline e conectados ao save (localStorage).
+      </p>
+    </div>
+
+    <div class="grid">
+      <!-- Oficina -->
+      <div class="card">
+        <div class="cardInner">
+          <div class="tagrow">
+            <div class="tag">CARRO</div>
+            <div class="chip">AJUSTES • SETUP</div>
+          </div>
+          <h3 class="title">Oficina & Setup</h3>
+          <p class="desc">
+            Ajuste parâmetros do carro. Esses ajustes serão usados nas sessões (treino/qualy/corrida)
+            conforme a lógica do jogo.
+          </p>
+          <div class="actions">
+            <button class="btn btnBlue" id="btnOficina">ABRIR OFICINA</button>
+          </div>
+          <div class="note">Dica: use setup + staff para evoluir desempenho (vamos integrar no motor depois).</div>
+        </div>
+      </div>
+
+      <!-- Staff -->
+      <div class="card">
+        <div class="cardInner">
+          <div class="tagrow">
+            <div class="tag">EQUIPE TÉCNICA</div>
+            <div class="chip">CONTRATOS</div>
+          </div>
+          <h3 class="title">Funcionários & Staff</h3>
+          <p class="desc">
+            Contrate especialistas e melhore ritmo, desgaste, confiabilidade, pit e estratégia.
+          </p>
+          <div class="actions">
+            <button class="btn btnGreen" id="btnStaff">ABRIR STAFF</button>
+          </div>
+          <div class="note">O objetivo aqui é manter o módulo pronto para impactar corrida depois.</div>
+        </div>
+      </div>
+
+      <!-- Patrocínios -->
+      <div class="card">
+        <div class="cardInner">
+          <div class="tagrow">
+            <div class="tag">FINANÇAS</div>
+            <div class="chip">BÔNUS • METAS</div>
+          </div>
+          <h3 class="title">Patrocínios & Marca</h3>
+          <p class="desc">
+            Escolha contratos, receba caixa semanal e acompanhe reputação. Offline, integrado ao save.
+          </p>
+          <div class="actions">
+            <button class="btn btnOrange" id="btnPatro">ABRIR PATROCÍNIOS</button>
+          </div>
+          <div class="note">Dica: caixa e reputação determinam futuras ofertas e upgrades.</div>
+        </div>
+      </div>
+
+      <!-- Mercado de pilotos -->
+      <div class="card">
+        <div class="cardInner">
+          <div class="tagrow">
+            <div class="tag">PILOTOS</div>
+            <div class="chip">MERCADO</div>
+          </div>
+          <h3 class="title">Mercado de Pilotos</h3>
+          <p class="desc">
+            Contratos e oportunidades. (Sem 404: link direto para mercado.html)
+          </p>
+          <div class="actions">
+            <button class="btn btnPurple" id="btnMercado">ABRIR MERCADO</button>
+          </div>
+          <div class="note">Se der 404, é porque o arquivo mercado.html não existe no repositório.</div>
+        </div>
+      </div>
+
+      <!-- Calendário -->
+      <div class="card">
+        <div class="cardInner">
+          <div class="tagrow">
+            <div class="tag">TEMPORADA</div>
+            <div class="chip">CALENDÁRIO</div>
+          </div>
+          <h3 class="title">Calendário & GPs</h3>
+          <p class="desc">
+            Planeje a temporada e acesse sessões por GP.
+          </p>
+          <div class="actions">
+            <button class="btn btnCyan" id="btnCalendario">IR PARA O CALENDÁRIO</button>
+          </div>
+          <div class="note">Você pode usar o calendário para ir em treino/qualy/corrida por GP.</div>
+        </div>
+      </div>
+
+      <!-- Sessões diretas -->
+      <div class="card">
+        <div class="cardInner">
+          <div class="tagrow">
+            <div class="tag">MODO RÁPIDO</div>
+            <div class="chip">LIVE • TELEMETRIA</div>
+          </div>
+          <h3 class="title">Sessões Diretas</h3>
+          <p class="desc">
+            Entre direto em Treino Livre, Classificação ou Corrida Rápida escolhendo o GP.
+          </p>
+          <div class="actions">
+            <button class="btn btnCyan" id="btnDiretoPractice">TREINO LIVRE</button>
+            <button class="btn btnBlue" id="btnDiretoQualy">CLASSIFICAÇÃO</button>
+            <button class="btn btnPink" id="btnDiretoRace">CORRIDA RÁPIDA</button>
+          </div>
+          <div class="note">
+            Importante: agora os botões abrem uma tela de seleção de GP (selecionar_gp.html),
+            evitando erro de pista/parametrização.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const qs = new URLSearchParams(location.search);
+      const userTeam = (qs.get('userTeam') || qs.get('team') || localStorage.getItem('f1_userTeam') || 'redbull').toLowerCase();
+
+      // persistência básica
+      localStorage.setItem('f1_userTeam', userTeam);
+
+      // tenta ler um perfil salvo
+      const savedProfile = (() => {
+        try { return JSON.parse(localStorage.getItem('f1_profile_v1') || 'null'); } catch(e){ return null; }
+      })();
+
+      const teamEl = document.getElementById('teamName');
+      const managerEl = document.getElementById('managerName');
+      teamEl.textContent = userTeam.toUpperCase();
+      managerEl.textContent = (savedProfile && savedProfile.managerName) ? savedProfile.managerName : 'Chefe de Equipe';
+
+      // Voltar: tenta ir para a tela anterior, senão volta para index
+      document.getElementById('btnBack').addEventListener('click', () => {
+        if (history.length > 1) history.back();
+        else location.href = 'index.html';
+      });
+
+      // Rotas
+      const go = (page) => location.href = page + '?userTeam=' + encodeURIComponent(userTeam);
+
+      document.getElementById('btnOficina').addEventListener('click', () => go('oficina.html'));
+      document.getElementById('btnStaff').addEventListener('click', () => go('funcionarios.html'));
+      document.getElementById('btnPatro').addEventListener('click', () => go('patrocinio.html'));
+      document.getElementById('btnCalendario').addEventListener('click', () => go('calendario.html'));
+      document.getElementById('btnMercado').addEventListener('click', () => go('mercado.html'));
+
+      // Sessões diretas: abre a tela de selecionar GP
+      const goSelect = (mode) => {
+        location.href = 'selecionar_gp.html?mode=' + encodeURIComponent(mode) + '&userTeam=' + encodeURIComponent(userTeam);
+      };
+
+      document.getElementById('btnDiretoPractice').addEventListener('click', () => goSelect('practice'));
+      document.getElementById('btnDiretoQualy').addEventListener('click', () => goSelect('qualifying'));
+      document.getElementById('btnDiretoRace').addEventListener('click', () => goSelect('quick_race'));
+    })();
+  </script>
+</body>
+</html>
