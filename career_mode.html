@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>F1 Manager Simulator 1.0 — Modo Carreira</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="ui.css" />
+  <link rel="stylesheet" href="ui-screens.css" />
+  <link rel="stylesheet" href="styles/design-system.css" />
+  <style>
+    body{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
+    .wrap{ width:min(980px, 100%); }
+    .title{ font-size:clamp(22px, 3.2vw, 34px); font-weight:900; letter-spacing:.02em; margin:0 0 6px; }
+    .subtitle{ opacity:.85; margin:0 0 18px; }
+    .grid{ display:grid; gap:14px; grid-template-columns: 1fr; }
+    @media(min-width:860px){ .grid{ grid-template-columns: 1fr 1fr; } }
+    .cardX{
+      background: rgba(0,0,0,.55);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 18px 45px rgba(0,0,0,.45);
+      backdrop-filter: blur(10px);
+    }
+    .cardX h2{ margin:0 0 6px; font-size: 18px; letter-spacing:.02em; }
+    .bullets{ margin: 10px 0 0; padding-left: 18px; opacity:.9; }
+    .bullets li{ margin: 6px 0; line-height: 1.25; }
+    .ctaRow{ display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+    .small{ opacity:.8; font-size: 12px; margin-top:10px; }
+  </style>
+</head>
+<body class="screen--cover">
+  <div class="wrap">
+    <h1 class="title">Escolha o modo de carreira</h1>
+    <p class="subtitle">Defina o nível de realismo e as regras da sua trajetória como chefe de equipe.</p>
+
+    <div class="grid">
+      <section class="cardX">
+        <h2>Simulação (Realista)</h2>
+        <div class="tag">Comece no fundo do grid</div>
+        <ul class="bullets">
+          <li>Você só pode iniciar em <b>equipes fracas</b> (ex.: Williams, Haas, Sauber).</li>
+          <li>Ganhe <b>pontuação</b> quando seus pilotos pontuam e você cumpre objetivos.</li>
+          <li>Perca pontuação por <b>metas não cumpridas</b> e perda de patrocínio.</li>
+          <li>Ao fim da temporada, você pode receber <b>ofertas</b> e mudar de equipe.</li>
+          <li><b>Game Over</b> se sua reputação/pontuação cair muito (demissão).</li>
+        </ul>
+        <div class="ctaRow">
+          <button id="btnRealista" class="btn btn--primary">Iniciar Simulação Realista</button>
+        </div>
+        <div class="small">Recomendado para quem quer desafio e progressão.</div>
+      </section>
+
+      <section class="cardX">
+        <h2>Modo Livre</h2>
+        <div class="tag">Escolha qualquer equipe</div>
+        <ul class="bullets">
+          <li>Comece em <b>qualquer equipe</b> do grid.</li>
+          <li>Metas mais flexíveis (menos punições).</li>
+          <li>Você ainda recebe ofertas e pode trocar de equipe se quiser.</li>
+          <li>Ideal para explorar o jogo e testar estratégias.</li>
+        </ul>
+        <div class="ctaRow">
+          <button id="btnLivre" class="btn">Iniciar Modo Livre</button>
+        </div>
+        <div class="small">Recomendado para jogar casualmente ou testar recursos.</div>
+      </section>
+    </div>
+
+    <p class="small" style="margin-top:14px;opacity:.75;">
+      Dica: você pode resetar a carreira a qualquer momento no Lobby.
+    </p>
+  </div>
+
+  <script src="career_mode.js"></script>
+</body>
+</html>

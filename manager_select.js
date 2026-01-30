@@ -1,5 +1,19 @@
 // =============================================
 // MANAGER_SELECT.JS
+
+// ======= ETAPA 3: Modo de Carreira (Realista vs Livre) =======
+const CAREER_MODE_KEY = "f1m25_career_mode";
+function getCareerMode(){
+  try{ return localStorage.getItem(CAREER_MODE_KEY) || "free"; }catch(e){ return "free"; }
+}
+function allowedTeamsForMode(){
+  const mode = getCareerMode();
+  if(mode === "realistic"){
+    return ["williams", "haas", "sauber"]; // equipes iniciais fracas
+  }
+  return null; // null = todas
+}
+
 // Tela de escolha de manager, bandeira e time
 // =============================================
 const ManagerData = (function () {
@@ -221,7 +235,13 @@ const ManagerUI = (function () {
     if (!select) return;
     select.innerHTML = "";
 
-    ManagerData.TEAMS.forEach((t) => {
+    const allow = allowedTeamsForMode();
+    const list = allow ? ManagerData.TEAMS.filter(t=> allow.includes(t.key)) : ManagerData.TEAMS;
+
+    // Se o default não é permitido no modo realista, ajusta para o primeiro permitido
+    if(allow && !allow.includes(selectedTeamKey)) selectedTeamKey = list[0]?.key || selectedTeamKey;
+
+    list.forEach((t) => {
       const opt = document.createElement("option");
       opt.value = t.key;
       opt.textContent = t.name;
@@ -385,6 +405,10 @@ const ManagerUI = (function () {
       selectedAvatar = saved.avatar || selectedAvatar;
       selectedCountryCode = saved.flagCode || saved.countryCode || "br";
       selectedTeamKey = saved.teamKey || "mercedes";
+
+      // Etapa 3: garantir time permitido no modo realista
+      const allow = allowedTeamsForMode();
+      if(allow && !allow.includes(selectedTeamKey)) selectedTeamKey = allow[0];
 
       const nameInput = qs("input-name");
       if (nameInput) nameInput.value = saved.name || "Novo Manager";

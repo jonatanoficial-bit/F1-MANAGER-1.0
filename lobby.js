@@ -2,6 +2,7 @@
 // Salva no localStorage. Não usa APIs externas.
 
 const STORAGE_KEY = "F1M25_SAVE_V1";
+const CAREER_MODE_KEY = "f1m25_career_mode";
 
 const $ = (id) => document.getElementById(id);
 
@@ -19,6 +20,40 @@ function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
 
 function nowISO(){ return new Date().toISOString(); }
 
+
+// ======= ETAPA 3: presets por equipe + objetivos iniciais =======
+const TEAM_PRESETS = {
+  redbull:   { id:"redbull",   name:"Red Bull Racing",    reputation:78, money:35000000, car:{aero:82,engine:86,chassis:80,reliability:78} },
+  ferrari:   { id:"ferrari",   name:"Scuderia Ferrari",   reputation:76, money:33000000, car:{aero:80,engine:84,chassis:80,reliability:76} },
+  mercedes:  { id:"mercedes",  name:"Mercedes",           reputation:74, money:32000000, car:{aero:79,engine:83,chassis:79,reliability:77} },
+  mclaren:   { id:"mclaren",   name:"McLaren",            reputation:68, money:28000000, car:{aero:76,engine:79,chassis:77,reliability:74} },
+  aston:     { id:"aston",     name:"Aston Martin",       reputation:62, money:26000000, car:{aero:74,engine:78,chassis:73,reliability:73} },
+  alpine:    { id:"alpine",    name:"Alpine",             reputation:58, money:23000000, car:{aero:72,engine:75,chassis:71,reliability:71} },
+  racingbulls:{id:"racingbulls",name:"Racing Bulls",      reputation:52, money:20000000, car:{aero:69,engine:72,chassis:68,reliability:70} },
+  sauber:    { id:"sauber",    name:"Sauber",             reputation:46, money:18000000, car:{aero:66,engine:70,chassis:65,reliability:68} },
+  haas:      { id:"haas",      name:"Haas",               reputation:44, money:17000000, car:{aero:65,engine:69,chassis:64,reliability:66} },
+  williams:  { id:"williams",  name:"Williams",           reputation:42, money:16000000, car:{aero:64,engine:68,chassis:63,reliability:66} },
+};
+
+function getCareerMode(){
+  try{ return localStorage.getItem(CAREER_MODE_KEY) || "free"; }catch(e){ return "free"; }
+}
+
+function getObjectiveFor(teamId, mode){
+  // Objetivos iniciais (simples e claros). Ajustaremos depois nas etapas 4/5.
+  if(mode === "realistic"){
+    if(teamId === "williams" || teamId === "haas" || teamId === "sauber"){
+      return "Marcar pelo menos 5 pontos na temporada";
+    }
+    return "Alcançar Top 6 no campeonato de construtores";
+  }
+  // modo livre
+  if(teamId === "redbull" || teamId === "ferrari" || teamId === "mercedes"){
+    return "Brigar pelo título (Top 2 construtores)";
+  }
+  return "Evoluir a equipe e marcar pontos regularmente";
+}
+
 function loadSave(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -35,19 +70,45 @@ function saveGame(state){
 }
 
 function defaultState(){
+  // Etapa 3: criar save inicial usando escolhas do jogador
+  let mode = getCareerMode();
+  let userTeamId = "redbull";
+  let userManagerName = "Manager";
+  try{
+    const t = localStorage.getItem("f1m2025_user_team");
+    if(t) userTeamId = t;
+    const rawMgr = localStorage.getItem("f1m2025_user_manager");
+    if(rawMgr){
+      const mgr = JSON.parse(rawMgr);
+      if(mgr?.name) userManagerName = mgr.name;
+      if(mgr?.teamKey) userTeamId = mgr.teamKey;
+    }
+  }catch(e){ console.warn("Falha lendo seleção inicial:", e); }
+
+  const preset = TEAM_PRESETS[userTeamId] || TEAM_PRESETS.redbull;
+  const objective = getObjectiveFor(preset.id, mode);
+
+  // Ajuste de dificuldade (base). Etapa 4 melhora metas, pontuação e risco/demissão.
+  const startMoney = preset.money + (mode === "realistic" ? 0 : 3000000);
+  const startRisk = (mode === "realistic" ? 22 : 10);
+
   return {
     version: 1,
+    createdAt: nowISO(),
+    careerMode: mode, // "realistic" | "free"
+    careerScore: 0,   // pontuação do manager (Etapas 4/5)
+
     createdAt: nowISO(),
     seasonYear: 2025,
     week: 1,
     team: {
-      id: "redbull",
-      name: "Red Bull Racing",
-      reputation: 78, // 0-100
-      money: 35000000,
+      id: preset.id,
+      name: preset.name,
+      reputation: preset.reputation, // 0-100
+      money: startMoney,
       costCap: 135000000,
       // base stats do carro/equipe (0-100)
-      car: { aero: 82, engine: 86, chassis: 80, reliability: 78 },
+      car: { ...preset.car },
       staff: {
         // slots: estrategista, engenheiro, pitcrew, aero
         strategist: null,
@@ -62,11 +123,12 @@ function defaultState(){
       }
     },
     manager: {
-      name: "Manager",
+      name: userManagerName,
       role: "Chefe de Equipe",
       contractYearsLeft: 2,
-      objective: "Top 3 no campeonato de construtores",
-      risk: 12, // 0-100
+      objective,
+      risk: startRisk, // 0-100
+      points: 0,       // pontos de temporada (Etapa 4)
       offers: []
     },
     offers: {
