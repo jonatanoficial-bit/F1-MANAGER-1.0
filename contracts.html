@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contratos — Pilotos & Staff</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="ui.css" />
+  <link rel="stylesheet" href="ui-screens.css" />
+  <link rel="stylesheet" href="styles/design-system.css" />
+  <style>
+    body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:18px;}
+    .wrap{width:min(1200px,100%);}
+    .h1{font-size:clamp(20px,3vw,30px);font-weight:900;margin:0 0 6px}
+    .sub{opacity:.85;margin:0 0 14px}
+    .grid{display:grid;gap:12px;grid-template-columns:1fr;}
+    @media(min-width:1050px){.grid{grid-template-columns:1.1fr .9fr;}}
+    .card{background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:14px;box-shadow:0 18px 45px rgba(0,0,0,.45);backdrop-filter: blur(10px);}
+    .list{display:grid;gap:10px;}
+    .item{border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:12px;background:rgba(0,0,0,.35);display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+    .item b{font-weight:900}
+    .meta{font-size:12px;opacity:.82;line-height:1.25}
+    .pill{font-size:11px;opacity:.9;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:4px 8px;background:rgba(0,0,0,.28)}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .hint{font-size:12px;opacity:.75;margin-top:8px;line-height:1.25}
+    .danger{color:#ffb3b3}
+    .modal{position:fixed;inset:0;z-index:12000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);}
+    .modal .box{width:min(620px,100%);border-radius:18px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.6);box-shadow:0 18px 60px rgba(0,0,0,.55);padding:14px;}
+    .form{display:grid;gap:10px;margin-top:10px}
+    .field{display:grid;gap:6px}
+    .field label{font-size:12px;opacity:.8}
+    .field input, .field select{width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.35);color:#fff}
+    .cols{display:grid;gap:10px;grid-template-columns:1fr;}
+    @media(min-width:620px){.cols{grid-template-columns:1fr 1fr;}}
+  </style>
+</head>
+<body class="screen--cover">
+  <div class="wrap">
+    <h1 class="h1">Contratos</h1>
+    <p class="sub">Renove, inclua cláusulas (buyout) e gerencie expirações. (Etapa 10 — AAA)</p>
+
+    <div class="grid">
+      <section class="card">
+        <h2 style="margin:0 0 6px;">Pilotos</h2>
+        <div id="drivers" class="list"></div>
+        <div class="hint">Dica: contratos próximos do fim aumentam risco se você ficar sem piloto.</div>
+      </section>
+
+      <section class="card">
+        <h2 style="margin:0 0 6px;">Staff</h2>
+        <div id="staff" class="list"></div>
+        <div class="row">
+          <a class="btn" href="lobby.html" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">Voltar ao Lobby</a>
+          <button id="btnRecalc" class="btn">Recalcular custos</button>
+        </div>
+        <div class="hint">Expiração é processada após cada corrida (semana).</div>
+      </section>
+    </div>
+  </div>
+
+  <div id="modal" class="modal">
+    <div class="box">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+        <div>
+          <div id="mTitle" style="font-weight:900;font-size:18px;">Renovar</div>
+          <div id="mSub" class="meta">Negociação</div>
+        </div>
+        <button id="mClose" class="btn">Fechar</button>
+      </div>
+
+      <div class="form">
+        <div class="cols">
+          <div class="field">
+            <label>Duração (semanas)</label>
+            <select id="mWeeks">
+              <option value="26">26</option>
+              <option value="52" selected>52</option>
+              <option value="78">78</option>
+              <option value="104">104</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Buyout (% do restante)</label>
+            <select id="mBuyout">
+              <option value="0.25">25%</option>
+              <option value="0.35" selected>35%</option>
+              <option value="0.50">50%</option>
+              <option value="0.70">70%</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="cols">
+          <div class="field">
+            <label>Salário/semana (oferta)</label>
+            <input id="mSalary" type="number" min="0" step="1000" />
+          </div>
+          <div class="field">
+            <label>Assinatura (bônus)</label>
+            <input id="mSign" type="number" min="0" step="1000" value="0" />
+          </div>
+        </div>
+
+        <div class="row" style="justify-content:flex-end;">
+          <button id="mApply" class="btn btn--primary">Aplicar contrato</button>
+        </div>
+
+        <div id="mHint" class="hint"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="contracts.js"></script>
+  <script src="js/build_footer.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Propostas — Troca de Equipe</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="ui.css" />
+  <link rel="stylesheet" href="ui-screens.css" />
+  <link rel="stylesheet" href="styles/design-system.css" />
+  <style>
+    body{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:18px;}
+    .wrap{width:min(1100px,100%);}
+    .h1{font-size:clamp(20px,3vw,30px);font-weight:900;margin:0 0 6px}
+    .sub{opacity:.85;margin:0 0 14px}
+    .grid{display:grid;gap:12px;grid-template-columns:1fr;}
+    @media(min-width:980px){.grid{grid-template-columns:1.2fr .8fr;}}
+    .card{background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:14px;box-shadow:0 18px 45px rgba(0,0,0,.45);backdrop-filter: blur(10px);}
+    .list{display:grid;gap:10px;}
+    .item{border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:12px;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+    .item b{font-weight:900}
+    .meta{font-size:12px;opacity:.82;line-height:1.25}
+    .pill{font-size:11px;opacity:.9;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:4px 8px;background:rgba(0,0,0,.28)}
+    .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px;}
+    .kpi{border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px;background:rgba(0,0,0,.35);}
+    .kpi .l{font-size:11px;opacity:.75}
+    .kpi .v{font-size:18px;font-weight:900;margin-top:2px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .hint{font-size:12px;opacity:.75;margin-top:8px;line-height:1.25}
+    .danger{color:#ffb3b3}
+  </style>
+</head>
+<body class="screen--cover">
+  <div class="wrap">
+    <h1 class="h1">Propostas</h1>
+    <p class="sub">Avalie convites para mudar de equipe. Mudar equipe redefine objetivos e pode alterar staff/patrocínio. (Etapa 9)</p>
+
+    <div class="grid">
+      <section class="card">
+        <h2 style="margin:0 0 6px;">Caixa de entrada</h2>
+        <div id="offers" class="list"></div>
+        <div class="hint">As propostas aparecem conforme sua reputação/score e risco. Aceitar pode reduzir risco (novo começo) ou aumentar pressão (meta alta).</div>
+      </section>
+
+      <section class="card">
+        <h2 style="margin:0 0 6px;">Seu status</h2>
+        <div class="kpis">
+          <div class="kpi"><div class="l">Equipe atual</div><div id="kTeam" class="v" style="font-size:16px;">—</div></div>
+          <div class="kpi"><div class="l">Risco</div><div id="kRisk" class="v">—</div></div>
+          <div class="kpi"><div class="l">Pontuação</div><div id="kScore" class="v">—</div></div>
+          <div class="kpi"><div class="l">Dinheiro</div><div id="kMoney" class="v">—</div></div>
+        </div>
+        <div class="row">
+          <a class="btn" href="lobby.html" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">Voltar ao Lobby</a>
+          <button id="btnClear" class="btn">Limpar propostas</button>
+        </div>
+        <div class="hint">Dica: no modo Realista, trocar de equipe pode vir com orçamento e metas mais agressivas.</div>
+      </section>
+    </div>
+  </div>
+
+  <script src="offers.js"></script>
+  <script src="js/build_footer.js"></script>
+</body>
+</html>

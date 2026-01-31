@@ -150,7 +150,7 @@ function renderMarket(state, market){
       }
 
       state.team.money = money - c.salary;
-      state.staff.hired.push({ ...c, hiredAt: Date.now(), weeksLeft: c.contractWeeks });
+      state.staff.hired.push({ ...c, hiredAt: Date.now(), weeksLeft: c.contractWeeks, buyoutPct: 0.35 });
       // remove do mercado
       const newMarket = market.filter(x=>x.id!==id);
       saveMarket(newMarket);

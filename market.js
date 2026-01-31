@@ -148,7 +148,7 @@ function renderMarket(state, market){
 
       state.team.drivers[idxVac] = {
         id: p.id, name: p.name, rating:p.rating, pace:p.pace, tyre:p.tyre, consistency:p.consistency,
-        morale: p.morale, salary:p.salary, contractWeeks:p.contractWeeks, weeksLeft:p.contractWeeks
+        morale: p.morale, salary:p.salary, contractWeeks:p.contractWeeks, weeksLeft:p.contractWeeks, buyoutPct: 0.35
       };
 
       const other = (state.team.drivers||[]).find((d,i)=>i!==idxVac);
