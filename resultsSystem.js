@@ -20,6 +20,7 @@
           if(pos>=1 && pos<=10) teamPts += pointsTable[pos-1];
         });
         localStorage.setItem('f1m25_last_race_points', String(teamPts));
+        localStorage.setItem('f1m25_driver_morale_postrace', String(teamPts));
         // salva também log de eventos da corrida para relatório/UX
         if(Array.isArray(state.events)){
           localStorage.setItem('f1m25_last_race_events', JSON.stringify(state.events.slice(-30)));

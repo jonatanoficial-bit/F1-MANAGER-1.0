@@ -8,6 +8,18 @@
 (function () {
   "use strict";
 
+  function getRosterStats(){
+    try{
+      const raw = localStorage.getItem("F1M25_SAVE_V1");
+      if(!raw) return null;
+      const st = JSON.parse(raw);
+      const teamId = (st?.team?.id || "").toString().toUpperCase();
+      const drivers = st?.team?.drivers || [];
+      return { teamId, drivers };
+    }catch(e){ return null; }
+  }
+
+
   const RaceSystem = {
     state: null,
     speed: 1,

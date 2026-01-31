@@ -376,12 +376,12 @@
           </div>
           <h3 class="title">Mercado de Pilotos</h3>
           <p class="desc">
-            Contratos e oportunidades. (Sem 404: link direto para mercado.html)
+            Contratos e oportunidades. (Sem 404: link direto para market.html)
           </p>
           <div class="actions">
             <button class="btn btnPurple" id="btnMercado">ABRIR MERCADO</button>
           </div>
-          <div class="note">Se der 404, é porque o arquivo mercado.html não existe no repositório.</div>
+          <div class="note">Se der 404, é porque o arquivo market.html não existe no repositório.</div>
         </div>
       </div>
 
@@ -459,7 +459,7 @@
       document.getElementById('btnStaff').addEventListener('click', () => go('funcionarios.html'));
       document.getElementById('btnPatro').addEventListener('click', () => go('patrocinio.html'));
       document.getElementById('btnCalendario').addEventListener('click', () => go('calendario.html'));
-      document.getElementById('btnMercado').addEventListener('click', () => go('mercado.html'));
+      document.getElementById('btnMercado').addEventListener('click', () => go('market.html'));
 
       // Sessões diretas: abre a tela de selecionar GP
       const goSelect = (mode) => {
@@ -476,6 +476,7 @@
 <script>
 window.__openStaff = ()=> location.href='staff.html';
 window.__openSponsors = ()=> location.href='sponsors.html';
+window.__openMarket=()=>location.href='market.html';
 </script>
 </body>
 </html>
