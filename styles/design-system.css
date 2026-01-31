@@ -203,8 +203,5 @@ p{ margin: 0; }
 .build-footer__meta{font-size:11px;opacity:.85}
 @media(min-width:720px){
   .build-footer__inner{flex-direction:row;align-items:center;justify-content:space-between;}
-  .build-footer__title{font-size:12px}
-  .build-footer__meta{font-size:11px}
 }
-/* Evita que o footer cubra botões no mobile */
 body{padding-bottom:86px;}

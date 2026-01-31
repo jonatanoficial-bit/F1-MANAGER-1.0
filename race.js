@@ -668,3 +668,20 @@
   });
 
 })();
+
+// Etapa 5: HUD de clima e Safety Car (mobile-friendly)
+(function(){
+  function safeText(id, txt){
+    const el = document.getElementById(id);
+    if(el) el.textContent = txt;
+  }
+  setInterval(()=>{
+    try{
+      const st = (window.RaceSystem && window.RaceSystem.state) ? window.RaceSystem.state : null;
+      if(!st) return;
+      safeText("uiWeather", "Clima: " + (st.weather || "—") + " • Pista: " + (st.trackTemp || "—"));
+      const sc = (st.safetyCarLaps && st.safetyCarLaps>0) ? `Safety Car (${st.safetyCarLaps}v)` : (st.status || "Correndo");
+      safeText("uiSafety", "Status: " + sc);
+    }catch(e){}
+  }, 500);
+})();

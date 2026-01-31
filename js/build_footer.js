@@ -1,5 +1,3 @@
-
-// js/build_footer.js
 (function(){
   async function getMeta(){
     try{
@@ -9,7 +7,6 @@
       return { game:'F1 Manager Simulator 1.0', edition:'Gold Vale Edition', build:'v0.0.0', updated:'' };
     }
   }
-
   function fmtDate(iso){
     try{
       if(!iso) return '';
@@ -17,7 +14,6 @@
       return `${d}/${m}/${y}`;
     }catch(e){ return iso || ''; }
   }
-
   function ensureFooter(meta){
     if(document.getElementById('buildFooter')) return;
     const footer = document.createElement('footer');
@@ -32,15 +28,8 @@
     `;
     document.body.appendChild(footer);
   }
-
   document.addEventListener('DOMContentLoaded', async ()=>{
     const meta = await getMeta();
     ensureFooter(meta);
-    // Atualiza title também
-    if(meta?.game && meta?.build){
-      if(!document.title.includes(meta.game)){
-        document.title = `${meta.game} — ${meta.edition}`;
-      }
-    }
   });
 })();

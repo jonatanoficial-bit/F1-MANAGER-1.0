@@ -9,6 +9,23 @@
 
   const ResultsSystem = {
     show(state) {
+      // Etapa 5: registra pontos do time do jogador para a carreira
+      try{
+        const pointsTable = [25,18,15,12,10,8,6,4,2,1];
+        const userTeam = (state.userTeam || '').toString().toUpperCase();
+        const player = Array.isArray(state.playerDrivers) ? state.playerDrivers : (state.drivers||[]).filter(d=> d.team === userTeam);
+        let teamPts = 0;
+        (player||[]).forEach(pd=>{
+          const pos = (pd.pos||999);
+          if(pos>=1 && pos<=10) teamPts += pointsTable[pos-1];
+        });
+        localStorage.setItem('f1m25_last_race_points', String(teamPts));
+        // salva também log de eventos da corrida para relatório/UX
+        if(Array.isArray(state.events)){
+          localStorage.setItem('f1m25_last_race_events', JSON.stringify(state.events.slice(-30)));
+        }
+      }catch(e){}
+
       const overlay = document.getElementById("results-overlay");
       if (!overlay) return;
 
@@ -72,6 +89,35 @@
         row.appendChild(right);
         body.appendChild(row);
       });
+
+
+      // Etapa 5: seção de eventos
+      if(Array.isArray(state.events) && state.events.length){
+        const evTitle = document.createElement("div");
+        evTitle.style.margin = "12px 0 6px";
+        evTitle.style.fontWeight = "900";
+        evTitle.style.opacity = ".9";
+        evTitle.textContent = "EVENTOS DA CORRIDA";
+        body.appendChild(evTitle);
+
+        const evBox = document.createElement("div");
+        evBox.style.border = "1px solid rgba(255,255,255,.10)";
+        evBox.style.borderRadius = "14px";
+        evBox.style.background = "rgba(0,0,0,.28)";
+        evBox.style.padding = "10px";
+        evBox.style.display = "grid";
+        evBox.style.gap = "6px";
+
+        state.events.slice(-8).forEach(e=>{
+          const line = document.createElement("div");
+          line.style.fontSize = "12px";
+          line.style.opacity = ".9";
+          line.textContent = `Volta ${e.lap}: ${e.text}`;
+          evBox.appendChild(line);
+        });
+
+        body.appendChild(evBox);
+      }
 
       const footer = document.createElement("footer");
       const back = document.createElement("button");

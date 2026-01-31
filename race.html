@@ -21,6 +21,11 @@
     <div class="topbar-center">
       <div class="lap-head">
         <div class="lap-remaining" id="laps-remaining">— VOLTAS RESTANTES</div>
+      <div class="race-hudline" style="margin-top:6px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <span class="hud-chip" id="uiWeather">Clima: —</span>
+        <span class="hud-chip" id="uiSafety">Status: —</span>
+      </div>
+
         <div class="lap-current" id="lap-current">VOLTA —/—</div>
       </div>
 
@@ -215,6 +220,10 @@
     </div>
   </footer>
 
+  <script src="raceRenderer.js"></script>
+  <script src="raceSystem.js"></script>
+  <script src="resultsSystem.js"></script>
+  <script src="raceUI.js"></script>
   <script src="race.js"></script>
   <script src="js/build_footer.js"></script>
 </body>

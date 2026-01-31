@@ -160,3 +160,14 @@ button {
     grid-template-rows: auto auto auto;
   }
 }
+
+/* Etapa 5 HUD chips */
+.hud-chip{
+  font-size:12px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(0,0,0,.35);
+  color:rgba(255,255,255,.92);
+  backdrop-filter: blur(10px);
+}
