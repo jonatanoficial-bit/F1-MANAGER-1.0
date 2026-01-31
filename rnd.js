@@ -1,6 +1,46 @@
 // rnd.js — Etapa 6 (P&D base)
 const STORAGE_KEY = "F1M25_SAVE_V1";
 
+// === Etapa 6.1 Hotfix: P&D abre mesmo se usuário entrou direto no Lobby via URL ===
+const USER_TEAM_KEY = "f1m2025_user_team";
+const USER_MANAGER_KEY = "f1m2025_user_manager";
+const CAREER_MODE_KEY = "f1m25_career_mode";
+
+function bootstrapStateIfMissing(){
+  let state = loadState();
+  if(state) return state;
+
+  // tenta montar um save mínimo a partir das seleções já feitas
+  let teamId = null;
+  let managerName = "Novo Manager";
+  try{ teamId = localStorage.getItem(USER_TEAM_KEY); }catch(e){}
+  try{ managerName = localStorage.getItem(USER_MANAGER_KEY) || managerName; }catch(e){}
+  // fallback: querystring ?userTeam=...
+  try{
+    const u = new URL(window.location.href);
+    if(!teamId) teamId = u.searchParams.get("userTeam");
+  }catch(e){}
+
+  if(!teamId){
+    // sem equipe selecionada, volta para o fluxo correto
+    window.location.href = "career_mode.html";
+    return null;
+  }
+
+  const mode = (localStorage.getItem(CAREER_MODE_KEY) || "free");
+  state = {
+    careerMode: mode,
+    careerScore: 0,
+    season: { year: 2025, gpIndex: 0, calendar: ["Bahrain","Saudi","Australia","Japan","China","Miami","Imola","Monaco","Spain","Canada","Austria","UK","Hungary","Belgium","Netherlands","Italy","Singapore","USA","Mexico","Brazil","Las Vegas","Qatar","Abu Dhabi"] },
+    manager: { name: managerName, points: 0, risk: mode === "realistic" ? 22 : 10, objective: "", offers: [] },
+    team: { id: String(teamId).toLowerCase(), name: String(teamId).toUpperCase(), money: mode === "realistic" ? 16000000 : 20000000, car: { aero:70, engine:70, chassis:70, reliability:70 } },
+    rd: { active: [], completed: [] }
+  };
+  saveState(state);
+  return state;
+}
+
+
 const PROJECTS = [
   { id:"aero_small",   name:"Pacote Aerodinâmico (pequeno)", stat:"aero",         gain: 2, cost: 1800000, weeks: 2 },
   { id:"aero_big",     name:"Pacote Aerodinâmico (grande)",  stat:"aero",         gain: 4, cost: 3200000, weeks: 4 },
@@ -95,7 +135,7 @@ function render(state){
 }
 
 document.addEventListener("DOMContentLoaded", ()=>{
-  const state = loadState();
+  const state = bootstrapStateIfMissing();
   if(!state){ window.location.href = "index.html"; return; }
   ensureRD(state);
   saveState(state);
