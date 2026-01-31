@@ -124,7 +124,17 @@ function render(state){
 
   const statusBox = document.getElementById("statusBox");
   const dem = computeDemission(state);
-  if(dem.fired){
+  // Sponsor line
+  try{
+    const s = state?.sponsor;
+    if(s){
+      const ok = (state?.manager?.points||0) >= (s.goalPointsSeason||0);
+      const msg = ok ? "Meta do patrocinador cumprida" : "Meta do patrocinador NÃO cumprida";
+      document.getElementById("statusBox").innerHTML = (document.getElementById("statusBox").innerHTML || "") + `<br/>Patrocinador: <b>${s.name}</b> — ${msg}`;
+    }
+  }catch(e){}
+
+if(dem.fired){
     statusBox.innerHTML = `<b class="danger">Você foi demitido.</b> ${dem.reason}<br/>Você pode reiniciar a carreira ou aceitar uma proposta (se existir).`;
   }else{
     statusBox.innerHTML = `Objetivo atual: <b>${state?.manager?.objective || "—"}</b><br/>Você pode continuar ou aceitar uma proposta.`;
