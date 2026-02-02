@@ -236,3 +236,5 @@ body{overflow-x:hidden; overflow-y:auto;}
   .manager-grid, .managers-grid, .grid-managers, .cards-grid{ grid-template-columns: 1fr !important; }
   input, select, button{ font-size: 16px; }
 }
+
+@media(max-width:900px){body{overflow-x:hidden}.screen--cover{min-height:100svh}}

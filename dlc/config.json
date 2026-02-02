@@ -1,0 +1,19 @@
+{
+  "dlc": [
+    {
+      "id": "historic_2004",
+      "name": "F1 2004 Legendary Season",
+      "enabled": false
+    },
+    {
+      "id": "historic_2012",
+      "name": "F1 2012 Classic Season",
+      "enabled": false
+    },
+    {
+      "id": "regulations_2026",
+      "name": "Regulations 2026",
+      "enabled": false
+    }
+  ]
+}
