@@ -332,13 +332,18 @@
         <div class="cardInner">
           <div class="tagrow">
 <a href="offers.html" class="btn" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">Propostas <span id="offerBadge" style="margin-left:8px;display:none;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:2px 8px;font-weight:900;font-size:12px;background:rgba(0,0,0,.25);">0</span></a>
-<a href="contracts.html" class="btn" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;" data-i18n="contracts">Contratos</a>
-
 <a href="rnd.html" class="btn btn--primary" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">P&D (Desenvolvimento)</a>
 
             <div class="tag">CARRO</div>
             <div class="chip">AJUSTES • SETUP</div>
           </div>
+
+    <div id="quickActions" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+      <a class="btn" href="market.html" style="text-decoration:none;display:inline-flex;">Mercado</a>
+      <a class="btn" href="staff.html" style="text-decoration:none;display:inline-flex;">Staff</a>
+      <a class="btn" href="sponsors.html" style="text-decoration:none;display:inline-flex;">Patrocínios</a>
+      </div>
+    
           <h3 class="title">Oficina & Setup</h3>
           <p class="desc">
             Ajuste parâmetros do carro. Esses ajustes serão usados nas sessões (treino/qualy/corrida)
@@ -477,7 +482,7 @@
 
       document.getElementById('btnOficina').addEventListener('click', () => go('oficina.html'));
       document.getElementById('btnStaff').addEventListener('click', () => go('funcionarios.html'));
-      document.getElementById('btnPatro').addEventListener('click', () => go('patrocinio.html'));
+      document.getElementById('btnPatro').addEventListener('click', () => go('sponsors.html'));
       document.getElementById('btnCalendario').addEventListener('click', () => go('calendario.html'));
       document.getElementById('btnMercado').addEventListener('click', () => go('market.html'));
 
@@ -491,7 +496,8 @@
       document.getElementById('btnDiretoRace').addEventListener('click', () => goSelect('quick_race'));
     })();
   </script>
-  <script src="js/i18n.js"></script>
+  <script src="js/save_bootstrap.js"></script>
+<script src="js/i18n.js"></script>
 <script src="js/build_footer.js"></script>
 
 <script>
@@ -501,5 +507,13 @@ window.__openMarket=()=>location.href='market.html';
 </script>
 
 <a href="media.html" class="btn" style="position:fixed;right:16px;bottom:60px;z-index:9000;text-decoration:none;" data-i18n="media">Mídia</a>
+
+<a href="save_tools.html" class="btn" style="position:fixed;left:16px;bottom:60px;z-index:9000;">Salvar / Carregar</a>
+
+<a href="achievements.html" class="btn" style="position:fixed;right:16px;bottom:360px;z-index:9000;">Conquistas</a>
+
+<a href="credits.html" class="btn" style="position:fixed;right:16px;bottom:20px;z-index:9000;">Créditos</a>
+
+<a href="dlc.html" class="btn" style="position:fixed;left:16px;bottom:110px;z-index:9000;">DLC</a>
 </body>
 </html>

@@ -209,3 +209,5 @@ function main(){
 }
 
 document.addEventListener("DOMContentLoaded", main);
+
+try{ applySeasonRegulations(state); }catch(e){}
