@@ -7,6 +7,7 @@ const CAREER_MODE_KEY = "f1m25_career_mode";
 const $ = (id) => document.getElementById(id);
 
 function money(n) {
+  persistUserTeamFromUrl();
   const v = Math.round(Number(n || 0));
   // formato BR simples
   return "R$ " + v.toLocaleString("pt-BR");

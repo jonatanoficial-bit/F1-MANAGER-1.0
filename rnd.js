@@ -7,7 +7,7 @@ const USER_MANAGER_KEY = "f1m2025_user_manager";
 const CAREER_MODE_KEY = "f1m25_career_mode";
 
 function bootstrapStateIfMissing(){
-  let state = loadState();
+  let state = ensureSaveOrRedirect();
   if(state) return state;
 
   // tenta montar um save mínimo a partir das seleções já feitas
@@ -136,7 +136,7 @@ function render(state){
 
 document.addEventListener("DOMContentLoaded", ()=>{
   const state = bootstrapStateIfMissing();
-  if(!state){ window.location.href = "index.html"; return; }
+  if(!state){ return; }
   ensureRD(state);
   saveState(state);
   render(state);

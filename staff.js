@@ -204,8 +204,8 @@ function render(state, market){
 }
 
 document.addEventListener("DOMContentLoaded", ()=>{
-  const state = loadState();
-  if(!state){ window.location.href="index.html"; return; }
+  const state = ensureSaveOrRedirect();
+  if(!state){ return; }
   ensureSystems(state);
   saveState(state);
 

@@ -215,8 +215,8 @@ function render(){
 }
 
 document.addEventListener("DOMContentLoaded", ()=>{
-  const state = loadState();
-  if(!state){ window.location.href="index.html"; return; }
+  const state = ensureSaveOrRedirect();
+  if(!state){ return; }
   ensure(state);
   // garante buyoutPct default
   (state.team.drivers||[]).forEach(d=>{ if(d.buyoutPct==null) d.buyoutPct = d.vacant ? 0.0 : 0.35; });
