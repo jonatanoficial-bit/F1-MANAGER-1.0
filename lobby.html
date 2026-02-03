@@ -277,7 +277,50 @@
       font-size: 12px;
       line-height: 1.35;
     }
-  </style>
+  
+    /* Etapa 17 — Lobby AAA: navegação única */
+    .mainNav{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-start;
+      padding:12px 14px;
+      border:1px solid var(--stroke);
+      border-radius:18px;
+      background: rgba(0,0,0,.35);
+      margin:16px 0;
+    }
+    .navBtn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      text-decoration:none;
+      font-weight:800;
+      letter-spacing:.3px;
+      transition: transform .08s ease, background .12s ease, border-color .12s ease;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .navBtn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.06); }
+    .navBtn:active{ transform: translateY(0px) scale(.99); }
+    .navBtn--primary{
+      background: linear-gradient(135deg, rgba(255,46,46,.90), rgba(255,79,216,.55));
+      border-color: rgba(255,255,255,.16);
+    }
+    .navSep{ flex:1 1 120px; height:1px; background: rgba(255,255,255,.08); border-radius:99px; }
+    @media (max-width: 700px){
+      .mainNav{ gap:8px; }
+      .navBtn{ padding:10px 12px; font-size:14px; }
+      .navSep{ flex-basis: 100%; }
+    }
+
+</style>
     <link rel="stylesheet" href="styles/design-system.css" />
   </head>
 
@@ -326,22 +369,28 @@
       </p>
     </div>
 
-    <div id="quickActions" class="card" style="margin:16px 0;background:rgba(0,0,0,.35)">
-      <div class="cardInner" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-start">
-        <a class="btn" href="market.html" style="text-decoration:none;display:inline-flex;">Mercado de Pilotos</a>
-        <a class="btn" href="staff.html" style="text-decoration:none;display:inline-flex;">Staff</a>
-        <a class="btn" href="sponsors.html" style="text-decoration:none;display:inline-flex;">Patrocínios</a>
-        <a class="btn" href="offers.html" style="text-decoration:none;display:inline-flex;">Propostas</a>
-        <a class="btn" href="contracts.html" style="text-decoration:none;display:inline-flex;">Contratos</a>
-      </div>
-    </div>
+    
+    <nav id="mainNav" class="mainNav" aria-label="Navegação principal">
+      <a class="navBtn" href="market.html">Mercado</a>
+      <a class="navBtn" href="staff.html">Staff</a>
+      <a class="navBtn" href="sponsors.html">Patrocínios</a>
+      <a class="navBtn" href="offers.html">Propostas</a>
+      <a class="navBtn" href="contracts.html">Contratos</a>
+      <a class="navBtn navBtn--primary" href="rnd.html">P&amp;D</a>
+      <span class="navSep"></span>
+      <a class="navBtn" href="media.html">Mídia</a>
+      <a class="navBtn" href="save_tools.html">Salvar</a>
+      <a class="navBtn" href="achievements.html">Conquistas</a>
+      <a class="navBtn" href="dlc.html">DLC</a>
+      <a class="navBtn" href="scenarios.html">Desafio</a>
+    </nav>
+
 
 <div class="grid">
       <!-- Oficina -->
       <div class="card">
         <div class="cardInner">
           <div class="tagrow">
-<a href="offers.html" class="btn" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">Propostas <span id="offerBadge" style="margin-left:8px;display:none;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:2px 8px;font-weight:900;font-size:12px;background:rgba(0,0,0,.25);">0</span></a>
 <a href="rnd.html" class="btn btn--primary" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">P&D (Desenvolvimento)</a>
 
             <div class="tag">CARRO</div>
@@ -509,16 +558,10 @@ window.__openSponsors = ()=> location.href='sponsors.html';
 window.__openMarket=()=>location.href='market.html';
 </script>
 
-<a href="media.html" class="btn" style="position:fixed;right:16px;bottom:60px;z-index:9000;text-decoration:none;" data-i18n="media">Mídia</a>
 
-<a href="save_tools.html" class="btn" style="position:fixed;left:16px;bottom:60px;z-index:9000;">Salvar / Carregar</a>
 
-<a href="achievements.html" class="btn" style="position:fixed;right:16px;bottom:360px;z-index:9000;">Conquistas</a>
 
-<a href="credits.html" class="btn" style="position:fixed;right:16px;bottom:20px;z-index:9000;">Créditos</a>
 
-<a href="dlc.html" class="btn" style="position:fixed;left:16px;bottom:110px;z-index:9000;">DLC</a>
 
-<a href="scenarios.html" class="btn" style="position:fixed;left:16px;bottom:260px;z-index:9000;">Modo Desafio</a>
 </body>
 </html>
