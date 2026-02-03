@@ -1,3 +1,19 @@
+
+function seedSponsorOffers(state){
+  const rep = (state.team?.reputation ?? state.manager?.reputation ?? 50);
+  const base = 350000 + Math.round(rep*12000);
+  const offers = [
+    {id:"bronze_1", name:"Apex Tools", tier:"Bronze", weeklyIncome: Math.round(base*0.7), goalPointsSeason: 15, penaltyRisk: 4},
+    {id:"bronze_2", name:"Volt Energy", tier:"Bronze", weeklyIncome: Math.round(base*0.75), goalPointsSeason: 18, penaltyRisk: 5},
+    {id:"silver_1", name:"Nimbus Cloud", tier:"Silver", weeklyIncome: Math.round(base*0.95), goalPointsSeason: 25, penaltyRisk: 6},
+    {id:"silver_2", name:"Orion Telecom", tier:"Silver", weeklyIncome: Math.round(base*1.05), goalPointsSeason: 28, penaltyRisk: 7},
+    {id:"gold_1", name:"Titan Financial", tier:"Gold", weeklyIncome: Math.round(base*1.25), goalPointsSeason: 35, penaltyRisk: 9},
+    {id:"platinum_1", name:"Nova Automotive", tier:"Platinum", weeklyIncome: Math.round(base*1.55), goalPointsSeason: 45, penaltyRisk: 12},
+  ];
+  try{ localStorage.setItem(SPONSOR_OFFERS_KEY, JSON.stringify(offers)); }catch(e){}
+  return offers;
+}
+
 // sponsors.js — Etapa 7 (Patrocínio + metas + impacto no risco)
 const STORAGE_KEY = "F1M25_SAVE_V1";
 const SPONSOR_OFFERS_KEY = "f1m25_sponsor_offers_v1";
