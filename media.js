@@ -23,6 +23,7 @@ function render(){
      st.manager.reputation=clamp(st.manager.reputation+ans.rep,0,100);
      st.manager.risk=clamp((st.manager.risk||20)+ans.risk,0,100);
      st.team.drivers.forEach(d=>{ if(!d.vacant){ d.morale=clamp((d.morale??70)+ans.morale,0,100);} });
+     if(st.challenge && st.challenge.active){ st.challenge.progress = st.challenge.progress||{races:0,points:0,weeksPositive:0,press:0,actions:0}; st.challenge.progress.press=(st.challenge.progress.press||0)+1; }
      save(st); alert("Resposta registrada"); location.href="lobby.html";
    };
    box.appendChild(b);

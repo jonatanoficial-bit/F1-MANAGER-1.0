@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Modo Desafio</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="ui.css"/>
+  <link rel="stylesheet" href="ui-screens.css"/>
+  <link rel="stylesheet" href="styles/design-system.css"/>
+  <style>
+    body{min-height:100vh;display:flex;justify-content:center;padding:18px}
+    .wrap{width:min(1100px,100%)}
+    .card{background:rgba(0,0,0,.55);border-radius:18px;padding:14px;border:1px solid rgba(255,255,255,.12)}
+    .grid{display:grid;gap:12px;grid-template-columns:1fr}
+    @media(min-width:900px){.grid{grid-template-columns:1fr 1fr}}
+    .item{padding:12px;border-radius:14px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.1)}
+    .meta{font-size:12px;opacity:.8;line-height:1.25}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .pill{font-size:11px;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:4px 8px;background:rgba(0,0,0,.25)}
+  </style>
+</head>
+<body class="screen--cover">
+  <div class="wrap">
+    <h1 style="font-weight:900;margin:0 0 6px">Modo Desafio</h1>
+    <p class="meta">Cenários curtos com objetivos e recompensas.</p>
+
+    <div class="card">
+      <div class="grid" id="list"></div>
+      <div class="row" style="margin-top:12px">
+        <a href="lobby.html" class="btn">Voltar ao Lobby</a>
+        <a href="career_mode.html" class="btn">Carreira</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/save_bootstrap.js"></script>
+  <script src="scenarios.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/build_footer.js"></script>
+</body>
+</html>
