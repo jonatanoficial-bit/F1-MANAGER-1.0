@@ -84,12 +84,60 @@
   /* ===============================
      URL PARAMS
      =============================== */
-  const params = new URLSearchParams(window.location.search);
-  const trackKey = (params.get("track") || "australia").toLowerCase();
-  const gpName = params.get("gp") || "GP da Austrália 2025";
-  const userTeam = (params.get("userTeam") || "ferrari").toLowerCase();
+    const params = new URLSearchParams(window.location.search);
 
-  /* ===============================
+  // Aliases para compatibilidade com URLs antigas/externas
+  const TRACK_ALIASES = {
+    "bahrain":"bahrein",
+    "bahrein":"bahrein",
+    "jeddah":"arabia_saudita",
+    "saudi":"arabia_saudita",
+    "saudiarabia":"arabia_saudita",
+    "japan":"japao",
+    "spain":"espanha",
+    "uk":"inglaterra",
+    "greatbritain":"inglaterra",
+    "hungary":"hungria",
+    "belgium":"belgica",
+    "netherlands":"holanda",
+    "italy":"italia_monza",
+    "monza":"italia_monza",
+    "singapore":"singapura",
+    "qatar":"catar",
+    "usa":"estados_unidos",
+    "cota":"estados_unidos",
+    "brazil":"sao_paulo",
+    "saopaulo":"sao_paulo",
+    "lasvegas":"las_vegas",
+    "abudhabi":"abu_dhabi",
+    "abu_dhabi":"abu_dhabi"
+  };
+
+  // Aliases de equipes (logos/assets)
+  const TEAM_ALIASES = {
+    "redbull":"red_bull",
+    "red_bull":"red_bull",
+    "alphatauri":"rb",
+    "rb":"rb",
+    "mercedes":"mercedes",
+    "ferrari":"ferrari",
+    "mclaren":"mclaren",
+    "astonmartin":"aston_martin",
+    "aston_martin":"aston_martin",
+    "alpine":"alpine",
+    "williams":"williams",
+    "haas":"haas",
+    "sauber":"sauber"
+  };
+
+  let trackKeyRaw = (params.get("track") || "australia").toLowerCase().trim();
+  const trackKey = (TRACK_ALIASES[trackKeyRaw] || trackKeyRaw);
+
+  const gpName = params.get("gp") || "GP da Austrália 2025";
+  const gpName = params.get("gp") || "GP da Austrália 2025";
+    const userTeamRaw = (params.get("userTeam") || localStorage.getItem("f1m2025_user_team") || "williams").toLowerCase().trim();
+  const userTeam = (TEAM_ALIASES[userTeamRaw] || userTeamRaw);
+/* ===============================
      DOM (ids reais do HTML)
      =============================== */
   const elTeamLogoTop = document.getElementById("teamLogoTop");
@@ -347,7 +395,6 @@
      =============================== */
   let svgRoot = null;
   let mainPath = null;
-  let guidePath = null;
   let pathPoints = [];
   let curvature = []; // 0..1 (quanto mais alto, mais curva)
   let carsLayer = null;
@@ -375,98 +422,65 @@
     if (!paths.length) throw new Error("Nenhum <path> encontrado no SVG.");
 
     let best = null;
-    let bestScore = -1;
-
-    function parseStyleNumber(el, key) {
-      const style = (el.getAttribute("style") || "");
-      const m = style.match(new RegExp(key + "\s*:\s*([0-9.]+)"));
-      if (m) return parseFloat(m[1]);
-      const attr = el.getAttribute(key);
-      if (attr && !isNaN(parseFloat(attr))) return parseFloat(attr);
-      return null;
-    }
-
-    function parseStyleToken(el, key) {
-      const style = (el.getAttribute("style") || "");
-      const m = style.match(new RegExp(key + "\s*:\s*([^;]+)"));
-      if (m) return (m[1] || "").trim();
-      const attr = el.getAttribute(key);
-      return (attr || "").trim();
-    }
-
+    let bestLen = -1;
     for (const p of paths) {
       try {
-        const len = p.getTotalLength(); // métrica geométrica
-        const strokeW = parseStyleNumber(p, "stroke-width") ?? 0;
-        const stroke = parseStyleToken(p, "stroke");
-        const fill = parseStyleToken(p, "fill");
-
-        // Heurística profissional:
-        // - prioriza paths que parecem "traçado": fill none + stroke definido + stroke-width maior
-        // - usa len como desempate
-        let score = 0;
-        if (fill === "none" || fill === "transparent") score += 120;
-        if (stroke && stroke !== "none") score += 120;
-        score += Math.min(strokeW, 12) * 30;
-        score += Math.min(len, 20000) * 0.02;
-
-        if (score > bestScore) {
-          bestScore = score;
+        const len = p.getTotalLength();
+        if (len > bestLen) {
+          bestLen = len;
           best = p;
         }
       } catch {
         // ignora path inválido
       }
     }
-
     if (!best) throw new Error("Não foi possível detectar o path principal da pista.");
     mainPath = best;
 
     // ------------------------------------------------------------
-    // NORMALIZAÇÃO PROFISSIONAL (sem destruir o SVG detalhado)
-    // - Mantém o SVG ORIGINAL (detalhes, pitlane, curvas, etc.)
-    // - Apenas garante viewBox e adiciona um "traçado-guia" fino
-    //   para dar leitura de simulador e servir de base ao movimento.
+    // LIMPEZA / NORMALIZAÇÃO (compatível com SVGs complexos)
+    // - Muitos SVGs (Inkscape) vêm com camadas/objetos com fill preto
+    //   que "tampam" a pista (tela fica preta/vazia no mobile).
+    // - Para manter o visual e evitar sobreposição, ocultamos tudo
+    //   que não seja o path principal (mainPath) e o cars-layer.
+    // - Também normalizamos o viewBox para enquadrar a pista.
     // ------------------------------------------------------------
     try {
-      // Se o SVG não tiver viewBox, cria um enquadramento baseado no path principal
-      if (!svgRoot.getAttribute("viewBox")) {
-        const bb = mainPath.getBBox();
-        const pad = Math.max(bb.width, bb.height) * 0.08;
-        const vx = bb.x - pad;
-        const vy = bb.y - pad;
-        const vw = bb.width + pad * 2;
-        const vh = bb.height + pad * 2;
-        svgRoot.setAttribute("viewBox", `${vx} ${vy} ${vw} ${vh}`);
-      }
+      // Oculta elementos potencialmente sobrepostos
+      const allEls = svgRoot.querySelectorAll("path, rect, polygon, polyline, ellipse, circle, text, image");
+      allEls.forEach((el) => {
+        // mantém o path principal
+        if (el === mainPath) return;
+        // mantém o layer de carros (se já existir)
+        if (el.closest && el.closest("#cars-layer")) return;
+        // mantém defs/masks se existirem
+        if (el.closest && el.closest("defs")) return;
+        el.style.display = "none";
+      });
+
+      // Enquadra a pista no viewBox (padding suave)
+      const bb = mainPath.getBBox();
+      const pad = Math.max(bb.width, bb.height) * 0.08;
+      const vx = bb.x - pad;
+      const vy = bb.y - pad;
+      const vw = bb.width + pad * 2;
+      const vh = bb.height + pad * 2;
+      svgRoot.setAttribute("viewBox", `${vx} ${vy} ${vw} ${vh}`);
       svgRoot.setAttribute("preserveAspectRatio", "xMidYMid meet");
     } catch (e) {
-      console.warn("Aviso: não foi possível normalizar viewBox (segue com o SVG original).", e);
+      // Se algum browser não suportar getBBox, seguimos sem travar.
+      console.warn("Aviso: não foi possível normalizar o SVG (segue com viewBox original).", e);
     }
 
-    // Cria um traçado-guia (overlay) SEM alterar o SVG original
-    // (fica bonito e resolve o 'pista vazia' imediatamente)
-    guidePath = svgRoot.querySelector("#f1m-guide-path");
-    if (!guidePath) {
-      guidePath = mainPath.cloneNode(true);
-      guidePath.setAttribute("id", "f1m-guide-path");
-      guidePath.style.fill = "none";
-      guidePath.style.stroke = "rgba(255,255,255,.65)";
-      // stroke responsivo ao tamanho do circuito
-      try {
-        const bb = mainPath.getBBox();
-        const base = Math.max(bb.width, bb.height);
-        guidePath.style.strokeWidth = String(Math.max(2, Math.round(base * 0.006)));
-      } catch {
-        guidePath.style.strokeWidth = "3";
-      }
-      guidePath.style.strokeLinecap = "round";
-      guidePath.style.strokeLinejoin = "round";
-      guidePath.style.filter = "drop-shadow(0 0 8px rgba(0,0,0,.55))";
-      guidePath.style.pointerEvents = "none";
-      // insere por cima do circuito, mas abaixo dos carros
-      svgRoot.appendChild(guidePath);
-    }
+
+    // estiliza pista (mantém look: fundo preto com traço claro)
+    // NÃO destrói o SVG original — apenas aplica estilo no path principal
+    mainPath.style.fill = "none";
+    mainPath.style.stroke = "#eaeaea";
+    mainPath.style.strokeWidth = "8";
+    mainPath.style.strokeLinecap = "round";
+    mainPath.style.strokeLinejoin = "round";
+    mainPath.style.filter = "drop-shadow(0 0 6px rgba(0,0,0,.55))";
 
     // cria layer para carros dentro do próprio SVG (alinhamento perfeito)
     carsLayer = svgRoot.querySelector("#cars-layer");
