@@ -17,10 +17,7 @@
   // =========================
   // CONFIG
   // =========================
-  let trackId = normalizeTrackId(qs("track", "australia"));
-  const TRACK_ALIASES = {"bahrain": "bahrein", "jeddah": "arabia_saudita", "saudi": "arabia_saudita", "japan": "japao", "spain": "espanha", "uk": "inglaterra", "hungary": "hungria", "belgium": "belgica", "netherlands": "holanda", "italy": "italia_monza", "monza": "italia_monza", "singapore": "singapura", "qatar": "catar", "usa": "estados_unidos", "cota": "estados_unidos", "mexico": "mexico", "brazil": "sao_paulo", "saopaulo": "sao_paulo", "lasvegas": "las_vegas", "abudhabi": "abu_dhabi", "abudabi": "abu_dhabi", "abu_dhabi": "abu_dhabi"};
-  trackId = (TRACK_ALIASES[trackId] || trackId);
-
+  const trackId = normalizeTrackId(qs("track", "australia"));
   const gpName = qs("gp", "GP");
   const userTeam = (qs("userTeam", "ferrari") || "ferrari").toUpperCase();
 

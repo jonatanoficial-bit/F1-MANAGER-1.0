@@ -188,8 +188,7 @@
     }
   </style>
     <link rel="stylesheet" href="styles/design-system.css" />
-  <script src="js/track_registry.js"></script>
-</head>
+  </head>
 
 <body>
   <div class="bg"></div>
@@ -266,29 +265,29 @@
 
       // ✅ Lista padrão (use as chaves que você já usa na URL: ?track=xxxxx)
       const TRACKS = [
-        { key:'bahrein', gp:'GP do Bahrein 2025' },
-        { key:'arabia_saudita', gp:'GP da Arábia Saudita 2025' },
+        { key:'bahrain',   gp:'GP do Bahrein 2025' },
+        { key:'jeddah',    gp:'GP da Arábia Saudita 2025' },
         { key:'australia', gp:'GP da Austrália 2025' },
-        { key:'japao', gp:'GP do Japão 2025' },
-        { key:'china', gp:'GP da China 2025' },
-        { key:'miami', gp:'GP de Miami 2025' },
-        { key:'imola', gp:'GP da Emilia-Romagna 2025' },
-        { key:'monaco', gp:'GP de Mônaco 2025' },
-        { key:'canada', gp:'GP do Canadá 2025' },
-        { key:'espanha', gp:'GP da Espanha 2025' },
-        { key:'austria', gp:'GP da Áustria 2025' },
-        { key:'inglaterra', gp:'GP da Grã-Bretanha 2025' },
-        { key:'hungria', gp:'GP da Hungria 2025' },
-        { key:'belgica', gp:'GP da Bélgica 2025' },
-        { key:'holanda', gp:'GP da Holanda 2025' },
-        { key:'italia_monza', gp:'GP da Itália 2025' },
-        { key:'singapura', gp:'GP de Singapura 2025' },
-        { key:'catar', gp:'GP do Catar 2025' },
-        { key:'estados_unidos', gp:'GP dos EUA 2025' },
-        { key:'mexico', gp:'GP do México 2025' },
-        { key:'sao_paulo', gp:'GP de São Paulo 2025' },
-        { key:'las_vegas', gp:'GP de Las Vegas 2025' },
-        { key:'abu_dhabi', gp:'GP de Abu Dhabi 2025' },
+        { key:'japan',     gp:'GP do Japão 2025' },
+        { key:'china',     gp:'GP da China 2025' },
+        { key:'imola',     gp:'GP da Emilia-Romagna 2025' },
+        { key:'monaco',    gp:'GP de Mônaco 2025' },
+        { key:'canada',    gp:'GP do Canadá 2025' },
+        { key:'spain',     gp:'GP da Espanha 2025' },
+        { key:'austria',   gp:'GP da Áustria 2025' },
+        { key:'uk',        gp:'GP da Grã-Bretanha 2025' },
+        { key:'hungary',   gp:'GP da Hungria 2025' },
+        { key:'belgium',   gp:'GP da Bélgica 2025' },
+        { key:'netherlands', gp:'GP da Holanda 2025' },
+        { key:'italy',     gp:'GP da Itália 2025' },
+        { key:'azerbaijan',gp:'GP do Azerbaijão 2025' },
+        { key:'singapore', gp:'GP de Singapura 2025' },
+        { key:'usa',       gp:'GP dos EUA 2025' },
+        { key:'mexico',    gp:'GP do México 2025' },
+        { key:'brazil',    gp:'GP do Brasil 2025' },
+        { key:'lasvegas',  gp:'GP de Las Vegas 2025' },
+        { key:'qatar',     gp:'GP do Qatar 2025' },
+        { key:'abudhabi',  gp:'GP de Abu Dhabi 2025' }
       ];
 
       // popula select
@@ -323,7 +322,6 @@
         const track = gpSelect.value;
         const gpName = TRACKS.find(t=>t.key===track)?.gp || ('GP ' + track);
         localStorage.setItem('f1_lastTrack', track);
-        localStorage.setItem('f1m25_selected_gp', track);
 
         // ✅ Monta URL compatível com o que você já usa:
         // practice.html?track=bahrain&gp=GP+do+Bahrein+2025&userTeam=redbull

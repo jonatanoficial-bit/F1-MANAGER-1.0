@@ -106,9 +106,6 @@ window.addEventListener("DOMContentLoaded", initQualifying);
 async function initQualifying() {
   const params = new URLSearchParams(location.search);
   qualyState.track = (params.get("track") || "australia").toLowerCase();
-  const TRACK_ALIASES = {"bahrain": "bahrein", "jeddah": "arabia_saudita", "saudi": "arabia_saudita", "japan": "japao", "spain": "espanha", "uk": "inglaterra", "hungary": "hungria", "belgium": "belgica", "netherlands": "holanda", "italy": "italia_monza", "monza": "italia_monza", "singapore": "singapura", "qatar": "catar", "usa": "estados_unidos", "cota": "estados_unidos", "mexico": "mexico", "brazil": "sao_paulo", "saopaulo": "sao_paulo", "lasvegas": "las_vegas", "abudhabi": "abu_dhabi", "abudabi": "abu_dhabi", "abu_dhabi": "abu_dhabi"};
-  qualyState.track = (TRACK_ALIASES[qualyState.track] || qualyState.track);
-
   qualyState.gp = params.get("gp") || "GP 2025";
   qualyState.userTeam = (params.get("userTeam") || "ferrari").toLowerCase();
   qualyState.baseLapMs = TRACK_BASE_LAP_TIME_MS[qualyState.track] || 90000;
