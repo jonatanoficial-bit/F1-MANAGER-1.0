@@ -85,7 +85,7 @@
      URL PARAMS
      =============================== */
   const params = new URLSearchParams(window.location.search);
-  const trackKey = (params.get("track") || "australia").toLowerCase();
+  let trackKey = (params.get("track") || "australia").toLowerCase();
   const gpName = params.get("gp") || "GP da Austrália 2025";
   const userTeam = (params.get("userTeam") || "ferrari").toLowerCase();
 
