@@ -236,6 +236,7 @@
   <!-- Dependências -->
   <script src="economySystem.js"></script>
   <script src="staffSystem.js"></script>
+  <script src="js/funcionarios_page.js"></script>
 
   <script>
     function getParam(name){
@@ -258,19 +259,7 @@
       window.location.href = "lobby.html?userTeam=" + encodeURIComponent(team);
     });
 
-    // ✅ RENDER CORRETO (corrige o “em branco”)
-    (function boot(){
-      try{
-        if(!window.StaffSystem){
-          console.error("StaffSystem não carregou. Verifique staffSystem.js");
-          return;
-        }
-        window.StaffSystem.renderInto("staffAtivo", "staffOfertas");
-      }catch(err){
-        console.error("Erro ao iniciar Staff:", err);
-      }
-    })();
-  </script>
+    </script>
   <script src="js/build_footer.js"></script>
 </body>
 </html>
