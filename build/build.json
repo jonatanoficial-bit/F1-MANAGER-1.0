@@ -1,4 +1,7 @@
 {
-  "build": "v1.8.2.1",
-  "updated": "05/02/2026"
+  "game": "F1 Manager Simulator 1.0",
+  "edition": "Gold Vale Edition",
+  "build": "v1.9.1",
+  "updated": "2026-02-13",
+  "dlc_ready": false
 }
