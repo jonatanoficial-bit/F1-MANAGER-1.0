@@ -19,8 +19,8 @@
      BASE DE PILOTOS (ajuste livre)
      =============================== */
   const DRIVERS_2025 = [
-    { id: "ver", name: "Max Verstappen", teamKey: "redbull", teamName: "Red Bull", rating: 98, color: "#1e41ff", face: "assets/faces/VER.png", short: "VER" },
-    { id: "per", name: "Sergio Pérez", teamKey: "redbull", teamName: "Red Bull", rating: 94, color: "#1e41ff", face: "assets/faces/PER.png", short: "PER" },
+    { id: "ver", name: "Max Verstappen", teamKey: "red_bull", teamName: "Red Bull", rating: 98, color: "#1e41ff", face: "assets/faces/VER.png", short: "VER" },
+    { id: "per", name: "Sergio Pérez", teamKey: "red_bull", teamName: "Red Bull", rating: 94, color: "#1e41ff", face: "assets/faces/PER.png", short: "PER" },
 
     { id: "lec", name: "Charles Leclerc", teamKey: "ferrari", teamName: "Ferrari", rating: 95, color: "#dc0000", face: "assets/faces/LEC.png", short: "LEC" },
     { id: "sai", name: "Carlos Sainz", teamKey: "ferrari", teamName: "Ferrari", rating: 93, color: "#dc0000", face: "assets/faces/SAI.png", short: "SAI" },
@@ -31,8 +31,8 @@
     { id: "ham", name: "Lewis Hamilton", teamKey: "mercedes", teamName: "Mercedes", rating: 95, color: "#00d2be", face: "assets/faces/HAM.png", short: "HAM" },
     { id: "rus", name: "George Russell", teamKey: "mercedes", teamName: "Mercedes", rating: 93, color: "#00d2be", face: "assets/faces/RUS.png", short: "RUS" },
 
-    { id: "alo", name: "Fernando Alonso", teamKey: "aston", teamName: "Aston Martin", rating: 94, color: "#006f62", face: "assets/faces/ALO.png", short: "ALO" },
-    { id: "str", name: "Lance Stroll", teamKey: "aston", teamName: "Aston Martin", rating: 88, color: "#006f62", face: "assets/faces/STR.png", short: "STR" },
+    { id: "alo", name: "Fernando Alonso", teamKey: "aston_martin", teamName: "Aston Martin", rating: 94, color: "#006f62", face: "assets/faces/ALO.png", short: "ALO" },
+    { id: "str", name: "Lance Stroll", teamKey: "aston_martin", teamName: "Aston Martin", rating: 88, color: "#006f62", face: "assets/faces/STR.png", short: "STR" },
 
     { id: "gas", name: "Pierre Gasly", teamKey: "alpine", teamName: "Alpine", rating: 90, color: "#0090ff", face: "assets/faces/GAS.png", short: "GAS" },
     { id: "oco", name: "Esteban Ocon", teamKey: "alpine", teamName: "Alpine", rating: 90, color: "#0090ff", face: "assets/faces/OCO.png", short: "OCO" },
@@ -41,8 +41,8 @@
     { id: "hul", name: "Nico Hülkenberg", teamKey: "sauber", teamName: "Sauber", rating: 89, color: "#00ffcc", face: "assets/faces/HUL.png", short: "HUL" },
     { id: "bor", name: "Gabriel Bortoleto", teamKey: "sauber", teamName: "Sauber", rating: 88, color: "#00ffcc", face: "assets/faces/BOR.png", short: "BOR" },
 
-    { id: "tsu", name: "Yuki Tsunoda", teamKey: "racingbulls", teamName: "Racing Bulls", rating: 89, color: "#2b4562", face: "assets/faces/TSU.png", short: "TSU" },
-    { id: "law", name: "Liam Lawson", teamKey: "racingbulls", teamName: "Racing Bulls", rating: 88, color: "#2b4562", face: "assets/faces/LAW.png", short: "LAW" },
+    { id: "tsu", name: "Yuki Tsunoda", teamKey: "rb", teamName: "Racing Bulls", rating: 89, color: "#2b4562", face: "assets/faces/TSU.png", short: "TSU" },
+    { id: "law", name: "Liam Lawson", teamKey: "rb", teamName: "Racing Bulls", rating: 88, color: "#2b4562", face: "assets/faces/LAW.png", short: "LAW" },
 
     { id: "alb", name: "Alex Albon", teamKey: "williams", teamName: "Williams", rating: 89, color: "#00a0de", face: "assets/faces/ALB.png", short: "ALB" },
     { id: "sar", name: "Logan Sargeant", teamKey: "williams", teamName: "Williams", rating: 86, color: "#00a0de", face: "assets/faces/SAR.png", short: "SAR" },
@@ -84,60 +84,84 @@
   /* ===============================
      URL PARAMS
      =============================== */
-    const params = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(window.location.search);
 
-  // Aliases para compatibilidade com URLs antigas/externas
+  // ===============================
+  // Normalização (padronização)
+  // ===============================
   const TRACK_ALIASES = {
+    // principais variações (URLs antigas / seleção)
     "bahrain":"bahrein",
     "bahrein":"bahrein",
     "jeddah":"arabia_saudita",
     "saudi":"arabia_saudita",
     "saudiarabia":"arabia_saudita",
+    "arabia":"arabia_saudita",
+    "australia":"australia",
     "japan":"japao",
+    "japao":"japao",
     "spain":"espanha",
+    "espanha":"espanha",
     "uk":"inglaterra",
     "greatbritain":"inglaterra",
+    "inglaterra":"inglaterra",
     "hungary":"hungria",
+    "hungria":"hungria",
     "belgium":"belgica",
+    "belgica":"belgica",
     "netherlands":"holanda",
+    "holanda":"holanda",
     "italy":"italia_monza",
     "monza":"italia_monza",
+    "italia":"italia_monza",
     "singapore":"singapura",
+    "singapura":"singapura",
     "qatar":"catar",
+    "catar":"catar",
     "usa":"estados_unidos",
     "cota":"estados_unidos",
+    "estados_unidos":"estados_unidos",
     "brazil":"sao_paulo",
+    "brasil":"sao_paulo",
     "saopaulo":"sao_paulo",
+    "sao_paulo":"sao_paulo",
     "lasvegas":"las_vegas",
+    "las_vegas":"las_vegas",
     "abudhabi":"abu_dhabi",
-    "abu_dhabi":"abu_dhabi"
+    "abu_dhabi":"abu_dhabi",
+    // já padronizados
+    "miami":"miami",
+    "imola":"imola",
+    "monaco":"monaco",
+    "canada":"canada",
+    "austria":"austria",
+    "mexico":"mexico",
+    "china":"china"
   };
 
-  // Aliases de equipes (logos/assets)
   const TEAM_ALIASES = {
+    // ids usados no jogo / links antigos
     "redbull":"red_bull",
     "red_bull":"red_bull",
-    "alphatauri":"rb",
-    "rb":"rb",
-    "mercedes":"mercedes",
-    "ferrari":"ferrari",
-    "mclaren":"mclaren",
+    "aston":"aston_martin",
     "astonmartin":"aston_martin",
     "aston_martin":"aston_martin",
-    "alpine":"alpine",
-    "williams":"williams",
-    "haas":"haas",
-    "sauber":"sauber"
+    "racingbulls":"rb",
+    "alphatauri":"rb",
+    "rb":"rb"
   };
 
-  let trackKeyRaw = (params.get("track") || "australia").toLowerCase().trim();
-  const trackKey = (TRACK_ALIASES[trackKeyRaw] || trackKeyRaw);
+  function normKey(v){ return (v || "").toString().toLowerCase().trim(); }
+
+  const trackKeyRaw = normKey(params.get("track") || "australia");
+  const trackKey = TRACK_ALIASES[trackKeyRaw] || trackKeyRaw;
 
   const gpName = params.get("gp") || "GP da Austrália 2025";
-  const gpName = params.get("gp") || "GP da Austrália 2025";
-    const userTeamRaw = (params.get("userTeam") || localStorage.getItem("f1m2025_user_team") || "williams").toLowerCase().trim();
-  const userTeam = (TEAM_ALIASES[userTeamRaw] || userTeamRaw);
-/* ===============================
+
+  const userTeamRaw = normKey(params.get("userTeam") || localStorage.getItem("f1m2025_user_team") || "ferrari");
+  const userTeam = TEAM_ALIASES[userTeamRaw] || userTeamRaw;
+
+  /* ===============================
      DOM (ids reais do HTML)
      =============================== */
   const elTeamLogoTop = document.getElementById("teamLogoTop");
@@ -417,50 +441,108 @@
     svgRoot.setAttribute("height", "100%");
     svgRoot.setAttribute("preserveAspectRatio", "xMidYMid meet");
 
-    // encontra o PATH principal pelo maior length (mais robusto)
-    const paths = Array.from(svgRoot.querySelectorAll("path"));
-    if (!paths.length) throw new Error("Nenhum <path> encontrado no SVG.");
+    // encontra o PATH principal (robusto p/ SVGs complexos)
+    // Heurística: combina comprimento + stroke-width + fill=none + área no viewBox
+    const paths = Array.from(svgRoot.querySelectorAll("path")).filter(p => !p.closest("defs"));
+    const polylines = Array.from(svgRoot.querySelectorAll("polyline, polygon")).filter(p => !p.closest("defs"));
+
+    const vbAttr = (svgRoot.getAttribute("viewBox") || "").trim();
+    let vbW = 0, vbH = 0;
+    if (vbAttr) {
+      const parts = vbAttr.split(/\s+|,/).map(Number);
+      if (parts.length === 4 && parts.every(Number.isFinite)) { vbW = parts[2]; vbH = parts[3]; }
+    }
+    if (!vbW || !vbH) {
+      // fallback: width/height do SVG
+      vbW = parseFloat(svgRoot.getAttribute("width") || "1000") || 1000;
+      vbH = parseFloat(svgRoot.getAttribute("height") || "1000") || 1000;
+    }
+    const vbArea = (vbW * vbH) || 1;
+
+    function styleNum(el, prop) {
+      const direct = el.getAttribute(prop);
+      if (direct) { const n = parseFloat(direct); if (Number.isFinite(n)) return n; }
+      const st = el.getAttribute("style") || "";
+      const m = new RegExp(prop + "\\s*:\\s*([0-9.]+)", "i").exec(st);
+      if (m) { const n = parseFloat(m[1]); if (Number.isFinite(n)) return n; }
+      return 0;
+    }
+    function styleStr(el, prop) {
+      const direct = el.getAttribute(prop);
+      if (direct) return direct;
+      const st = el.getAttribute("style") || "";
+      const m = new RegExp(prop + "\\s*:\\s*([^;]+)", "i").exec(st);
+      return m ? m[1].trim() : "";
+    }
+
+    function scorePath(p) {
+      let len = 0;
+      try { len = p.getTotalLength(); } catch { return -1; }
+
+      let bb = null;
+      try { bb = p.getBBox(); } catch { bb = null; }
+
+      const sw = styleNum(p, "stroke-width");
+      const fill = (styleStr(p, "fill") || "").toLowerCase();
+      const idc = ((p.getAttribute("id") || "") + " " + (p.getAttribute("class") || "")).toLowerCase();
+
+      // área do bbox (para filtrar background/miudezas)
+      let areaRatio = 0.5;
+      if (bb) {
+        const area = Math.max(1, (bb.width || 1) * (bb.height || 1));
+        areaRatio = Math.min(2, area / vbArea);
+      }
+
+      // penalizações
+      let mult = 1.0;
+      if (areaRatio > 0.98) mult *= 0.15;        // muito provável background
+      if (areaRatio < 0.02) mult *= 0.20;        // muito pequeno (detalhe)
+      if (fill === "none") mult *= 1.25;         // pista costuma ser fill=none
+      if (sw >= 2) mult *= (1 + Math.min(sw, 12) / 12); // pista tem stroke mais largo
+
+      // boosts por id/class
+      if (/track|circuit|layout|race|course|main|path3001|outline|center/i.test(idc)) mult *= 1.35;
+
+      // boost por "complexidade" (comprimento relativo ao bbox)
+      if (bb) {
+        const per = Math.max(1, (bb.width || 1) + (bb.height || 1));
+        const complexity = len / per; // quanto mais curvilíneo, maior
+        mult *= Math.min(2.2, Math.max(0.6, complexity / 4));
+      }
+
+      return len * mult;
+    }
+
+    if (!paths.length && !polylines.length) throw new Error("Nenhum <path>/<polyline> encontrado no SVG.");
 
     let best = null;
-    let bestLen = -1;
+    let bestScore = -1;
+
     for (const p of paths) {
-      try {
-        const len = p.getTotalLength();
-        if (len > bestLen) {
-          bestLen = len;
-          best = p;
-        }
-      } catch {
-        // ignora path inválido
-      }
+      const s = scorePath(p);
+      if (s > bestScore) { bestScore = s; best = p; }
     }
-    if (!best) throw new Error("Não foi possível detectar o path principal da pista.");
+
+    // fallback: se por algum motivo não achou path válido, tenta polyline/polygon
+    if (!best && polylines.length) {
+      // cria path temporário só para amostrar
+      const tmp = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      tmp.setAttribute("d", "M " + polylines[0].getAttribute("points"));
+      best = tmp;
+    }
+
+    if (!best) throw new Error("Não foi possível detectar o traçado principal da pista.");
     mainPath = best;
 
     // ------------------------------------------------------------
-    // LIMPEZA / NORMALIZAÇÃO (compatível com SVGs complexos)
-    // - Muitos SVGs (Inkscape) vêm com camadas/objetos com fill preto
-    //   que "tampam" a pista (tela fica preta/vazia no mobile).
-    // - Para manter o visual e evitar sobreposição, ocultamos tudo
-    //   que não seja o path principal (mainPath) e o cars-layer.
-    // - Também normalizamos o viewBox para enquadrar a pista.
+    // NORMALIZAÇÃO (compatível com SVGs complexos)
+    // - Muitos SVGs não possuem viewBox ou possuem margens grandes.
+    // - Aqui nós enquadramos a pista (bbox) com um padding leve,
+    //   SEM esconder os detalhes do SVG original.
     // ------------------------------------------------------------
     try {
-      // Oculta elementos potencialmente sobrepostos
-      const allEls = svgRoot.querySelectorAll("path, rect, polygon, polyline, ellipse, circle, text, image");
-      allEls.forEach((el) => {
-        // mantém o path principal
-        if (el === mainPath) return;
-        // mantém o layer de carros (se já existir)
-        if (el.closest && el.closest("#cars-layer")) return;
-        // mantém defs/masks se existirem
-        if (el.closest && el.closest("defs")) return;
-        el.style.display = "none";
-      });
-
-      // Enquadra a pista no viewBox (padding suave)
       const bb = mainPath.getBBox();
-      const pad = Math.max(bb.width, bb.height) * 0.08;
+      const pad = Math.max(bb.width, bb.height) * 0.10;
       const vx = bb.x - pad;
       const vy = bb.y - pad;
       const vw = bb.width + pad * 2;
@@ -468,19 +550,36 @@
       svgRoot.setAttribute("viewBox", `${vx} ${vy} ${vw} ${vh}`);
       svgRoot.setAttribute("preserveAspectRatio", "xMidYMid meet");
     } catch (e) {
-      // Se algum browser não suportar getBBox, seguimos sem travar.
       console.warn("Aviso: não foi possível normalizar o SVG (segue com viewBox original).", e);
     }
 
+    // Overlay do traçado (linha guia) — mantém SVG original + destaca o circuito
+    try {
+      const existing = svgRoot.querySelector("#f1m-guide-path");
+      if (existing) existing.remove();
 
-    // estiliza pista (mantém look: fundo preto com traço claro)
-    // NÃO destrói o SVG original — apenas aplica estilo no path principal
-    mainPath.style.fill = "none";
-    mainPath.style.stroke = "#eaeaea";
-    mainPath.style.strokeWidth = "8";
-    mainPath.style.strokeLinecap = "round";
-    mainPath.style.strokeLinejoin = "round";
-    mainPath.style.filter = "drop-shadow(0 0 6px rgba(0,0,0,.55))";
+      const guide = mainPath.cloneNode(true);
+      guide.setAttribute("id", "f1m-guide-path");
+      guide.style.fill = "none";
+      guide.style.stroke = "#f2f2f2";
+      guide.style.strokeWidth = "7";
+      guide.style.strokeLinecap = "round";
+      guide.style.strokeLinejoin = "round";
+      guide.style.opacity = "0.95";
+      guide.style.pointerEvents = "none";
+      guide.style.filter = "drop-shadow(0 0 6px rgba(0,0,0,.65))";
+
+      // Insere no mesmo parent do path principal (respeita transforms)
+      if (mainPath.parentNode) {
+        mainPath.parentNode.insertBefore(guide, mainPath.nextSibling);
+      } else {
+        svgRoot.appendChild(guide);
+      }
+    } catch (e) {
+      console.warn("Aviso: não foi possível aplicar overlay do traçado.", e);
+    }
+    // Mantém o SVG original intacto.
+    // O destaque/visual "simulador" é feito pelo overlay #f1m-guide-path.
 
     // cria layer para carros dentro do próprio SVG (alinhamento perfeito)
     carsLayer = svgRoot.querySelector("#cars-layer");
@@ -503,9 +602,22 @@
   function buildPathPoints(pathEl, samples) {
     const len = pathEl.getTotalLength();
     const pts = [];
+
+    // Converte pontos locais do path para o sistema de coordenadas do SVG (respeita transforms)
+    const mtx = pathEl.getCTM ? pathEl.getCTM() : null;
+
     for (let i = 0; i < samples; i++) {
       const p = pathEl.getPointAtLength((i / samples) * len);
-      pts.push({ x: p.x, y: p.y });
+      let x = p.x, y = p.y;
+
+      if (mtx) {
+        // DOMMatrix: [a c e; b d f]
+        const nx = x * mtx.a + y * mtx.c + mtx.e;
+        const ny = x * mtx.b + y * mtx.d + mtx.f;
+        x = nx; y = ny;
+      }
+
+      pts.push({ x, y });
     }
     return pts;
   }

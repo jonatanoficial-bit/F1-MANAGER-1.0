@@ -322,22 +322,7 @@
 
 </style>
     <link rel="stylesheet" href="styles/design-system.css" />
-  
-<style>
-.big-card-btn{
-  width:100%;
-  padding:16px;
-  font-size:18px;
-  border-radius:18px;
-  background:linear-gradient(135deg,#ff2e2e,#b40000);
-  box-shadow:0 12px 28px rgba(0,0,0,.45);
-}
-.big-card-btn:hover{
-  filter:brightness(1.1);
-}
-</style>
-
-</head>
+  </head>
 
 \1
 
@@ -383,6 +368,24 @@
         Todos os módulos são offline e conectados ao save (localStorage).
       </p>
     </div>
+
+    
+    <nav id="mainNav" class="mainNav" aria-label="Navegação principal">
+      <a class="navBtn" href="market.html">Mercado</a>
+      <a class="navBtn" href="staff.html">Staff</a>
+      <a class="navBtn" href="sponsors.html">Patrocínios</a>
+      <a class="navBtn" href="offers.html">Propostas</a>
+      <a class="navBtn" href="contracts.html">Contratos</a>
+      <a class="navBtn navBtn--primary" href="rnd.html">P&amp;D</a>
+      <span class="navSep"></span>
+      <a class="navBtn" href="media.html">Mídia</a>
+      <a class="navBtn" href="save_tools.html">Salvar</a>
+      <a class="navBtn" href="achievements.html">Conquistas</a>
+      <a class="navBtn" href="dlc.html">DLC</a>
+      <a class="navBtn" href="scenarios.html">Desafio</a>
+    </nav>
+
+
 <div class="grid">
       <!-- Oficina -->
       <div class="card">
@@ -499,29 +502,7 @@
           </div>
         </div>
       </div>
-    
-      <!-- Utilitários -->
-      <div class="card">
-        <div class="cardInner">
-          <div class="tagrow">
-            <div class="tag">UTIL</div>
-            <div class="chip">EXTRAS</div>
-          </div>
-          <h3 class="title">Central de Recursos</h3>
-          <p class="desc">
-            Acesse mídia, salvar/carregar, conquistas, DLC e desafios.
-          </p>
-          <div class="actions" style="flex-wrap:wrap">
-            <a class="btn btnBlue" href="media.html" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">MÍDIA</a>
-            <a class="btn btnPurple" href="save_tools.html" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">SALVAR</a>
-            <a class="btn btnPurple" href="achievements.html" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">CONQUISTAS</a>
-            <a class="btn btnPurple" href="dlc.html" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">DLC</a>
-            <a class="btn btnPurple" href="scenarios.html" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">DESAFIO</a>
-          </div>
-          <div class="note">Dica: complete desafios para desbloquear conteúdo extra (base para DLC futura).</div>
-        </div>
-      </div>
-</div>
+    </div>
   </div>
 
   <script>
@@ -576,6 +557,11 @@ window.__openStaff = ()=> location.href='staff.html';
 window.__openSponsors = ()=> location.href='sponsors.html';
 window.__openMarket=()=>location.href='market.html';
 </script>
+
+
+
+
+
 
 </body>
 </html>

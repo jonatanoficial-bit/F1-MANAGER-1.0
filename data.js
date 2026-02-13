@@ -60,7 +60,7 @@ const TEAMS_2025 = [
         country: "Alemanha",
         base: "Brackley, Reino Unido",
         logo: "assets/logos/mercedes.png",
-        carImage: "assets/cars/mercedes_car.png",
+        carImage: "assets/cars/mercedes.png",
         mainColor: "#00D2BE"
     },
     {
@@ -68,8 +68,8 @@ const TEAMS_2025 = [
         name: "Oracle Red Bull Racing",
         country: "Áustria",
         base: "Milton Keynes, Reino Unido",
-        logo: "assets/logos/redbull.png",
-        carImage: "assets/cars/redbull_car.png",
+        logo: "assets/logos/red_bull.png",
+        carImage: "assets/cars/red_bull.png",
         mainColor: "#1E41FF"
     },
     {
@@ -78,7 +78,7 @@ const TEAMS_2025 = [
         country: "Itália",
         base: "Maranello, Itália",
         logo: "assets/logos/ferrari.png",
-        carImage: "assets/cars/ferrari_car.png",
+        carImage: "assets/cars/ferrari.png",
         mainColor: "#DC0000"
     },
     {
@@ -87,7 +87,7 @@ const TEAMS_2025 = [
         country: "Reino Unido",
         base: "Woking, Reino Unido",
         logo: "assets/logos/mclaren.png",
-        carImage: "assets/cars/mclaren_car.png",
+        carImage: "assets/cars/mclaren.png",
         mainColor: "#FF8700"
     },
     {
@@ -95,8 +95,8 @@ const TEAMS_2025 = [
         name: "Aston Martin Aramco",
         country: "Reino Unido",
         base: "Silverstone, Reino Unido",
-        logo: "assets/logos/astonmartin.png",
-        carImage: "assets/cars/astonmartin_car.png",
+        logo: "assets/logos/aston_martin.png",
+        carImage: "assets/cars/aston_martin.png",
         mainColor: "#006F62"
     },
     {
@@ -105,7 +105,7 @@ const TEAMS_2025 = [
         country: "França",
         base: "Enstone, Reino Unido",
         logo: "assets/logos/alpine.png",
-        carImage: "assets/cars/alpine_car.png",
+        carImage: "assets/cars/alpine.png",
         mainColor: "#2293D1"
     },
     {
@@ -114,7 +114,7 @@ const TEAMS_2025 = [
         country: "Reino Unido",
         base: "Grove, Reino Unido",
         logo: "assets/logos/williams.png",
-        carImage: "assets/cars/williams_car.png",
+        carImage: "assets/cars/williams.png",
         mainColor: "#005AFF"
     },
     {
@@ -123,7 +123,7 @@ const TEAMS_2025 = [
         country: "Itália",
         base: "Faenza, Itália",
         logo: "assets/logos/rb.png",
-        carImage: "assets/cars/rb_car.png",
+        carImage: "assets/cars/rb.png",
         mainColor: "#2B4562"
     },
     {
@@ -132,7 +132,7 @@ const TEAMS_2025 = [
         country: "Suíça",
         base: "Hinwil, Suíça",
         logo: "assets/logos/sauber.png",
-        carImage: "assets/cars/sauber_car.png",
+        carImage: "assets/cars/sauber.png",
         mainColor: "#00E701"
     },
     {
@@ -141,7 +141,7 @@ const TEAMS_2025 = [
         country: "Estados Unidos",
         base: "Kannapolis, EUA",
         logo: "assets/logos/haas.png",
-        carImage: "assets/cars/haas_car.png",
+        carImage: "assets/cars/haas.png",
         mainColor: "#B6BABD"
     }
 ];
@@ -264,27 +264,27 @@ const REAL_MANAGERS_2025 = [
 // -------------------------------
 
 const TRACKS_2025 = [
-    { id: 1,  name: "Bahrein",          country: "Bahrein",          laps: 57,  image: "assets/tracks/bahrein.png" },
-    { id: 2,  name: "Arábia Saudita",   country: "Arábia Saudita",   laps: 50,  image: "assets/tracks/saudi.png" },
-    { id: 3,  name: "Austrália",        country: "Austrália",        laps: 58,  image: "assets/tracks/australia.png" },
-    { id: 4,  name: "Japão",            country: "Japão",            laps: 53,  image: "assets/tracks/japan.png" },
-    { id: 5,  name: "China",            country: "China",            laps: 56,  image: "assets/tracks/china.png" },
-    { id: 6,  name: "Miami",            country: "Estados Unidos",   laps: 57,  image: "assets/tracks/miami.png" },
-    { id: 7,  name: "Imola",            country: "Itália",           laps: 63,  image: "assets/tracks/imola.png" },
-    { id: 8,  name: "Mônaco",           country: "Mônaco",           laps: 78,  image: "assets/tracks/monaco.png" },
-    { id: 9,  name: "Canadá",           country: "Canadá",           laps: 70,  image: "assets/tracks/canada.png" },
-    { id: 10, name: "Espanha",          country: "Espanha",          laps: 66,  image: "assets/tracks/spain.png" },
-    { id: 11, name: "Áustria",          country: "Áustria",          laps: 71,  image: "assets/tracks/austria.png" },
-    { id: 12, name: "Inglaterra",       country: "Reino Unido",      laps: 52,  image: "assets/tracks/uk.png" },
-    { id: 13, name: "Hungria",          country: "Hungria",          laps: 70,  image: "assets/tracks/hungary.png" },
-    { id: 14, name: "Bélgica",          country: "Bélgica",          laps: 44,  image: "assets/tracks/belgium.png" },
-    { id: 15, name: "Holanda",          country: "Holanda",          laps: 72,  image: "assets/tracks/netherlands.png" },
+    { id: 1,  name: "Bahrein",          country: "Bahrein",          laps: 57,  image: "assets/tracks/bahrein.svg" },
+    { id: 2,  name: "Arábia Saudita",   country: "Arábia Saudita",   laps: 50,  image: "assets/tracks/arabia_saudita.svg" },
+    { id: 3,  name: "Austrália",        country: "Austrália",        laps: 58,  image: "assets/tracks/australia.svg" },
+    { id: 4,  name: "Japão",            country: "Japão",            laps: 53,  image: "assets/tracks/japao.svg" },
+    { id: 5,  name: "China",            country: "China",            laps: 56,  image: "assets/tracks/china.svg" },
+    { id: 6,  name: "Miami",            country: "Estados Unidos",   laps: 57,  image: "assets/tracks/miami.svg" },
+    { id: 7,  name: "Imola",            country: "Itália",           laps: 63,  image: "assets/tracks/imola.svg" },
+    { id: 8,  name: "Mônaco",           country: "Mônaco",           laps: 78,  image: "assets/tracks/monaco.svg" },
+    { id: 9,  name: "Canadá",           country: "Canadá",           laps: 70,  image: "assets/tracks/canada.svg" },
+    { id: 10, name: "Espanha",          country: "Espanha",          laps: 66,  image: "assets/tracks/espanha.svg" },
+    { id: 11, name: "Áustria",          country: "Áustria",          laps: 71,  image: "assets/tracks/austria.svg" },
+    { id: 12, name: "Inglaterra",       country: "Reino Unido",      laps: 52,  image: "assets/tracks/inglaterra.svg" },
+    { id: 13, name: "Hungria",          country: "Hungria",          laps: 70,  image: "assets/tracks/hungria.svg" },
+    { id: 14, name: "Bélgica",          country: "Bélgica",          laps: 44,  image: "assets/tracks/belgica.svg" },
+    { id: 15, name: "Holanda",          country: "Holanda",          laps: 72,  image: "assets/tracks/holanda.svg" },
     { id: 16, name: "Itália (Monza)",   country: "Itália",           laps: 53,  image: "assets/tracks/monza.png" },
-    { id: 17, name: "Singapura",        country: "Singapura",        laps: 61,  image: "assets/tracks/singapore.png" },
-    { id: 18, name: "Catar",            country: "Catar",            laps: 57,  image: "assets/tracks/qatar.png" },
+    { id: 17, name: "Singapura",        country: "Singapura",        laps: 61,  image: "assets/tracks/singapura.svg" },
+    { id: 18, name: "Catar",            country: "Catar",            laps: 57,  image: "assets/tracks/catar.svg" },
     { id: 19, name: "Estados Unidos (COTA)", country: "Estados Unidos", laps: 56, image: "assets/tracks/cota.png" },
-    { id: 20, name: "México",           country: "México",           laps: 71,  image: "assets/tracks/mexico.png" },
-    { id: 21, name: "Abu Dhabi",        country: "Emirados Árabes",  laps: 58,  image: "assets/tracks/abudhabi.png" }
+    { id: 20, name: "México",           country: "México",           laps: 71,  image: "assets/tracks/mexico.svg" },
+    { id: 21, name: "Abu Dhabi",        country: "Emirados Árabes",  laps: 58,  image: "assets/tracks/abu_dhabi.svg" }
 ];
 
 // -------------------------------
