@@ -1,3 +1,5 @@
+/* F1M_PRACTICE_IIFE v1 */
+(()=>{
 /* =========================================================
    F1 MANAGER 2025 – PRACTICE.JS (TREINO LIVRE) — v6.1
    Alinhado ao HTML real (practice.html) e SVG (assets/tracks/*.svg)
@@ -1131,4 +1133,6 @@
   }
 
   init();
+})();
+
 })();
