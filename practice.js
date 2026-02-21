@@ -620,7 +620,8 @@
     if (!carsLayer) {
       carsLayer = document.createElementNS("http://www.w3.org/2000/svg", "g");
       carsLayer.setAttribute("id", "cars-layer");
-      svgRoot.appendChild(carsLayer);
+      const carsParent = (mainPath && mainPath.parentNode) ? mainPath.parentNode : svgRoot;
+      carsParent.appendChild(carsLayer);
     }
 
     // gera pontos (densidade boa p/ 60fps)
