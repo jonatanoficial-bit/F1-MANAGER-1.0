@@ -421,6 +421,7 @@
      =============================== */
   let svgRoot = null;
   let mainPath = null;
+  let pathCTM = null;
   let pathPoints = [];
   let curvature = []; // 0..1 (quanto mais alto, mais curva)
   let carsLayer = null;
@@ -537,25 +538,56 @@
     mainPath = best;
 
     // ------------------------------------------------------------
-    // NORMALIZAÇÃO (compatível com SVGs complexos)
-    // - Muitos SVGs não possuem viewBox ou possuem margens grandes.
-    // - Aqui nós enquadramos a pista (bbox) com um padding leve,
-    //   SEM esconder os detalhes do SVG original.
+    // NORMALIZAÇÃO (SVGs complexos com <g transform>)
+    // - getBBox() NÃO inclui transforms => pode cortar/invisibilizar pistas.
+    // - Aqui calculamos um bbox REAL em coordenadas do ROOT amostrando pontos
+    //   do path e aplicando a matriz CTM do path.
     // ------------------------------------------------------------
-    try {
-      const bb = mainPath.getBBox();
-      const pad = Math.max(bb.width, bb.height) * 0.10;
-      const vx = bb.x - pad;
-      const vy = bb.y - pad;
-      const vw = bb.width + pad * 2;
-      const vh = bb.height + pad * 2;
-      svgRoot.setAttribute("viewBox", `${vx} ${vy} ${vw} ${vh}`);
-      svgRoot.setAttribute("preserveAspectRatio", "xMidYMid meet");
-    } catch (e) {
-      console.warn("Aviso: não foi possível normalizar o SVG (segue com viewBox original).", e);
+    function getCTMMatrix(pathEl) {
+      try { return (pathEl.getCTM && pathEl.getCTM()) ? pathEl.getCTM() : null; } catch { return null; }
+    }
+    function applyMatrix(pt, m) {
+      if (!m) return pt;
+      return { x: pt.x * m.a + pt.y * m.c + m.e, y: pt.x * m.b + pt.y * m.d + m.f };
+    }
+    function getPointOnPathRoot(pathEl, dist, m) {
+      const p = pathEl.getPointAtLength(dist);
+      return applyMatrix({ x: p.x, y: p.y }, m);
     }
 
-    // Overlay do traçado (linha guia) — mantém SVG original + destaca o circuito
+    pathCTM = getCTMMatrix(mainPath);
+
+    // garante viewBox baseado em pontos transformados
+    try {
+      const total = Math.max(1, mainPath.getTotalLength());
+      const samples = Math.max(400, Math.min(2200, Math.floor(total / 3))); // densidade boa p/ curvas
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+
+      for (let i = 0; i <= samples; i++) {
+        const d = (i / samples) * total;
+        const pt = getPointOnPathRoot(mainPath, d, pathCTM);
+        if (!Number.isFinite(pt.x) || !Number.isFinite(pt.y)) continue;
+        if (pt.x < minX) minX = pt.x;
+        if (pt.y < minY) minY = pt.y;
+        if (pt.x > maxX) maxX = pt.x;
+        if (pt.y > maxY) maxY = pt.y;
+      }
+
+      if (minX !== Infinity && maxX !== -Infinity) {
+        const w = Math.max(1, maxX - minX);
+        const h = Math.max(1, maxY - minY);
+        const pad = Math.max(w, h) * 0.10;
+        const vx = minX - pad;
+        const vy = minY - pad;
+        const vw = w + pad * 2;
+        const vh = h + pad * 2;
+        svgRoot.setAttribute("viewBox", `${vx} ${vy} ${vw} ${vh}`);
+        svgRoot.setAttribute("preserveAspectRatio", "xMidYMid meet");
+      }
+    } catch (e) {
+      console.warn("Aviso: normalização por CTM falhou:", e);
+    }
+// Overlay do traçado (linha guia) — mantém SVG original + destaca o circuito
     try {
       const existing = svgRoot.querySelector("#f1m-guide-path");
       if (existing) existing.remove();
