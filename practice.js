@@ -1,3 +1,166 @@
+(function(){
+
+  // === SVG Track Engine v1.9.7 (Modo A: grupo local) ===
+  // Objetivo: carros e overlay no MESMO <g> do traçado, usando coordenadas LOCAIS do path (sem CTM nos pontos).
+  // Além disso, padroniza viewBox para enquadrar o circuito (resolve Japão: texto aparecendo/desproporção).
+
+  function safeTotalLength(path) {
+    try { return path.getTotalLength(); } catch { return 0; }
+  }
+
+  function isInDefs(el) {
+    let p = el;
+    while (p) {
+      if (p.tagName && p.tagName.toLowerCase() === "defs") return true;
+      p = p.parentNode;
+    }
+    return false;
+  }
+
+  function looksLikeTextPath(el) {
+    const id = (el.getAttribute("id") || "").toLowerCase();
+    const cls = (el.getAttribute("class") || "").toLowerCase();
+    if (id.includes("text") || cls.includes("text")) return true;
+    // se estiver dentro de <text> (muito raro, mas)
+    let p = el.parentNode;
+    while (p) {
+      if (p.tagName && p.tagName.toLowerCase() === "text") return true;
+      p = p.parentNode;
+    }
+    return false;
+  }
+
+  function isTrackCandidate(path) {
+    if (!path || path.tagName?.toLowerCase() !== "path") return false;
+    if (isInDefs(path)) return false;
+    if (looksLikeTextPath(path)) return false;
+
+    const d = path.getAttribute("d") || "";
+    if (d.length < 40) return false;
+
+    const len = safeTotalLength(path);
+    if (len < 800) return false; // remove paths pequenos (ornamentos)
+    // Preferência por fill none (muitos traçados são outline)
+    return true;
+  }
+
+  function findMainPath(svgRoot) {
+    const paths = Array.from(svgRoot.querySelectorAll("path"));
+    const candidates = paths.filter(isTrackCandidate);
+    if (!candidates.length) return paths.sort((a,b)=>safeTotalLength(b)-safeTotalLength(a))[0] || null;
+
+    // Pontuação: comprimento + bônus se fill=none + bônus se stroke definido
+    let best = null, bestScore = -1;
+    for (const p of candidates) {
+      const len = safeTotalLength(p);
+      const fill = (p.getAttribute("fill") || "").toLowerCase();
+      const stroke = (p.getAttribute("stroke") || "").toLowerCase();
+      let score = len;
+      if (fill === "none" || fill === "transparent") score *= 1.15;
+      if (stroke && stroke !== "none") score *= 1.05;
+      // penaliza se bbox absurdamente grande (background)
+      try {
+        const bb = p.getBBox();
+        if (bb.width * bb.height > 5e7) score *= 0.7;
+      } catch {}
+      if (score > bestScore) { bestScore = score; best = p; }
+    }
+    return best;
+  }
+
+  // Converte bbox local do path para bbox no ROOT do SVG usando CTM (para ajustar viewBox)
+  function computeRootBBox(path) {
+    try {
+      const bb = path.getBBox(); // bbox no sistema local do elemento
+      const m = path.getCTM();   // matrix para root
+      if (!m) return bb;
+
+      const pts = [
+        {x: bb.x, y: bb.y},
+        {x: bb.x + bb.width, y: bb.y},
+        {x: bb.x + bb.width, y: bb.y + bb.height},
+        {x: bb.x, y: bb.y + bb.height},
+      ];
+
+      const tx = (p) => ({
+        x: m.a*p.x + m.c*p.y + m.e,
+        y: m.b*p.x + m.d*p.y + m.f
+      });
+
+      const tpts = pts.map(tx);
+      const xs = tpts.map(p=>p.x), ys=tpts.map(p=>p.y);
+      const minX = Math.min(...xs), maxX=Math.max(...xs);
+      const minY = Math.min(...ys), maxY=Math.max(...ys);
+      return { x:minX, y:minY, width:(maxX-minX), height:(maxY-minY) };
+    } catch {
+      return { x:0, y:0, width:1000, height:1000 };
+    }
+  }
+
+  function applyTrackViewBox(svgRoot, path) {
+    try {
+      // Se já existe viewBox OK, não mexe (mas em alguns SVGs falta ou é ruim).
+      const hasVB = svgRoot.hasAttribute("viewBox");
+      // Sempre aplicamos um viewBox focado no circuito para padronizar e remover textos/labels fora.
+      const rb = computeRootBBox(path);
+      const pad = Math.max(30, Math.min(rb.width, rb.height) * 0.08);
+      const x = rb.x - pad, y = rb.y - pad;
+      const w = rb.width + pad*2, h = rb.height + pad*2;
+      svgRoot.setAttribute("viewBox", `${x} ${y} ${w} ${h}`);
+      svgRoot.setAttribute("preserveAspectRatio", "xMidYMid meet");
+      svgRoot.setAttribute("width", "100%");
+      svgRoot.setAttribute("height", "100%");
+    } catch (e) {
+      console.warn("applyTrackViewBox falhou:", e);
+    }
+  }
+
+  function ensureOverlayAndCars(svgRoot, mainPath) {
+    // overlay no mesmo grupo do path (modo A)
+    try {
+      const old = svgRoot.querySelector("#f1m-guide-path");
+      if (old) old.remove();
+
+      const guide = mainPath.cloneNode(true);
+      guide.setAttribute("id", "f1m-guide-path");
+      guide.style.fill = "none";
+      guide.style.stroke = "#f2f2f2";
+      guide.style.strokeWidth = "7";
+      guide.style.strokeLinecap = "round";
+      guide.style.strokeLinejoin = "round";
+      guide.style.opacity = "0.98";
+      guide.style.pointerEvents = "none";
+      guide.style.filter = "drop-shadow(0 0 7px rgba(0,0,0,.75))";
+
+      const parent = mainPath.parentNode || svgRoot;
+      parent.insertBefore(guide, mainPath.nextSibling);
+    } catch (e) {
+      console.warn("overlay falhou:", e);
+    }
+
+    // cars layer no mesmo grupo do path
+    let carsLayer = svgRoot.querySelector("#cars-layer");
+    if (carsLayer) carsLayer.remove();
+
+    carsLayer = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    carsLayer.setAttribute("id", "cars-layer");
+    carsLayer.style.pointerEvents = "none";
+    const parent = mainPath.parentNode || svgRoot;
+    parent.appendChild(carsLayer);
+
+    return carsLayer;
+  }
+
+  function buildLocalPathPoints(pathEl, samples) {
+    const len = safeTotalLength(pathEl);
+    const pts = [];
+    if (!len) return pts;
+    for (let i=0;i<samples;i++){
+      const p = pathEl.getPointAtLength((i/samples)*len);
+      pts.push({x:p.x, y:p.y});
+    }
+    return pts;
+  }
 /* F1M_PRACTICE_IIFE v1 */
 (()=>{
 /* =========================================================
@@ -620,12 +783,11 @@
     if (!carsLayer) {
       carsLayer = document.createElementNS("http://www.w3.org/2000/svg", "g");
       carsLayer.setAttribute("id", "cars-layer");
-      const carsParent = (mainPath && mainPath.parentNode) ? mainPath.parentNode : svgRoot;
-      carsParent.appendChild(carsLayer);
+      svgRoot.appendChild(carsLayer);
     }
 
     // gera pontos (densidade boa p/ 60fps)
-    pathPoints = buildPathPoints(mainPath, 1400);
+    pathPoints = buildLocalPathPoints(mainPath, 1400);
     curvature = buildCurvature(pathPoints);
 
     // expõe para debug
@@ -1166,6 +1328,8 @@
   }
 
   init();
+})();
+
 })();
 
 })();
